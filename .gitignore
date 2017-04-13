@@ -1,0 +1,21 @@
+# os and editor
+.DS_Store
+Thumbs.db
+.cache
+.project
+*.sublime-project
+*.sublime-workspace
+
+# python
+*.py[cod]
+
+# project
+notes
+
+#temp
+test
+setup.py
+requirements.txt
+docs
+data
+bin
