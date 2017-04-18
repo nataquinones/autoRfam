@@ -10,7 +10,7 @@ Thumbs.db
 *.py[cod]
 
 # project
-notes
+files
 
 #temp
 test
@@ -19,3 +19,4 @@ requirements.txt
 docs
 data
 bin
+venv
