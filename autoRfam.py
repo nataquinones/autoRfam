@@ -4,7 +4,7 @@ from scripts import get_fasta
 from scripts import nhmmerall
 from scripts import cluster_ali
 
-# .....PATHS.....
+# .............................PATHS...................................
 # ..........software..........
 NHMMER_PATH = "/Users/nquinones/Documents/hmmer-3.1b2/binaries/nhmmer"
 # ..........files..........
@@ -20,6 +20,9 @@ COMPONENTS_OUT = os.path.splitext(NHMMER_PARSEDNCLEAN)[0] + ".comp.list"
 ALI_DIR = os.path.join(NHMMER_OUT_FOLDER, "all_ali/")
 
 
+# .............................FUNCTIONS...................................
+
+
 def main():
     # step 1
     get_fasta.main(URS_FILE, FASTA_FILE)
@@ -29,5 +32,6 @@ def main():
     comp_list = cluster_ali.main(NHMMER_PARSEDNCLEAN)
     print comp_list
 
+# .........................................................................
 if __name__ == '__main__':
     main()
