@@ -1,3 +1,14 @@
+"""
+Description:
+Takes .tsv file with columns "query" and "target"
+(made for nhmmertbl_parse.py output) to make into networkx matrix
+and compute connected components (and/or cliques.) Returns pickle list file.
+
+Use:
+cluster_ali.py <in>
+<in> .tsv file with columns "query" and "target"
+"""
+
 import networkx as nx
 import os
 import pandas as pd
@@ -9,13 +20,22 @@ import sys
 # .............................FUNCTIONS...................................
 
 
-def read_tbl(tbl_file):
-    # read table into pandas df
-    df_tbl = pd.read_table(tbl_file, delim_whitespace=True)
+def read_tsv(tsvin):
+    """
+    Read tsv file into pandas df
+    """
+    df_tbl = pd.read_csv(tsvin, sep="\t")
     return df_tbl
 
 
 def map_urstoint(df_tbl):
+    """
+    Takes dataframe from read_tsv and maps URS to integers to handle
+    matrix axes.
+    [0] map_dict: dictonary relating URS:int
+    [1] q_list: list of the set of queries
+    [2] rev_map_dict: dictonary relating int:URS
+    """
     map_dict = {}
     q_list = list(set(df_tbl["query"]))
     for i in range(0, len(q_list)):
@@ -27,6 +47,9 @@ def map_urstoint(df_tbl):
 
 def make_matrix(df_tbl, q_list, map_dict):
     """
+    Takes dataframe from read_tsv(), q_list and map_dict from map_urstoint(),
+    makes scipy sparce dok_matrix and then networkx graph.
+    Returns networkx style graph.
     """
     # drop lines where target not in query
     df_tbl = df_tbl[df_tbl["target"].isin(q_list)]
@@ -44,6 +67,9 @@ def make_matrix(df_tbl, q_list, map_dict):
 
 def find_components(graph, rev_map_dict):
     """
+    Takes networkx graph [from make_matrix()] and makes list of lists of
+    connected components. Replaces with names from int:URS map,
+    [from rev_map_dict from map_urstoint()]
     """
     components_set = list(nx.connected_components(graph))
     components = []
@@ -61,6 +87,9 @@ def find_components(graph, rev_map_dict):
 
 def find_cliques(graph, rev_map_dict):
     """
+    Takes networkx graph [from make_matrix()] and makes list of lists of
+    cliques. Replaces with names from int:URS map,
+    [from rev_map_dict from map_urstoint()]
     """
     cliques = list(nx.find_cliques(graph))
     cliques_names = []
@@ -69,13 +98,11 @@ def find_cliques(graph, rev_map_dict):
         for j in cliques[i]:
             sublist.append(rev_map_dict[j])
         cliques_names.append(sublist)
-    with open(cliq_out, 'wb') as f:
-        pickle.dump(cliques_names, f)
     return cliques_names
 
 
-def main(tbl_file):
-        df_tbl = read_tbl(tbl_file)
+def main(tsvin):
+        df_tbl = read_tsv(tsvin)
         mapping = map_urstoint(df_tbl)
         map_dict = mapping[0]
         q_list = mapping[1]
@@ -87,8 +114,8 @@ def main(tbl_file):
 # .........................................................................
 
 if __name__ == '__main__':
-    TBL_FILE = sys.argv[1]
-    COMP_OUT = os.path.join(os.path.dirname(TBL_FILE), "comp.list.tsv")
-    COMP_LIST = main(TBL_FILE)
+    IN_TSV = sys.argv[1]
+    COMP_OUT = os.path.join(os.path.dirname(IN_TSV), "comp.list")
+    COMP_LIST = main(IN_TSV)
     with open(COMP_OUT, 'wb') as f:
             pickle.dump(COMP_LIST, f)
