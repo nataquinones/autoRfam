@@ -16,7 +16,6 @@ files
 test
 setup.py
 requirements.txt
-docs
 data
 bin
 venv
