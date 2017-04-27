@@ -24,14 +24,11 @@ def read_tsv(tsvin):
     return df_tbl
 
 
-def cleanup(df_tbl, allali_path):
+def cleanup(df_tbl, allali_path, selali_path):
     """
     Takes df with sequences marked for deletion, cleans the alignment
     and makes a copy in directory "clean_alignments/"
     """
-    selali_path = os.path.join(os.path.dirname(
-                               os.path.dirname(allali_path)),
-                               "clean_alignments")
     os.mkdir(selali_path)
     # select unmarked sequences to delete
     df_todel = df_tbl[df_tbl["keep"] != "*"]
@@ -54,10 +51,16 @@ def cleanup(df_tbl, allali_path):
         shutil.copy(move_from, move_to)
 
 
+def main(tsvin, allali_path, selali_path):
+    df_tbl = read_tsv(tsvin)
+    cleanup(df_tbl, allali_path, selali_path)
+
 # .........................................................................
 
 if __name__ == '__main__':
     IN_TSV = sys.argv[1]
     IN_ALLALIPATH = sys.argv[2]
-    DF_TBL = read_tsv(IN_TSV)
-    cleanup(DF_TBL, IN_ALLALIPATH)
+    OUT_SELALIPATH = os.path.join(os.path.dirname(
+                               os.path.dirname(IN_ALLALIPATH)),
+                               "clean_alignments")
+    main(IN_TSV, IN_ALLALIPATH, OUT_SELALIPATH)
