@@ -30,6 +30,7 @@ def read_picklelist(pickle_file):
     """
     with open(pickle_file, 'rb') as handle:
         components_l = pickle.load(handle)
+
     return components_l
 
 
@@ -37,19 +38,24 @@ def easel_stats(eslalistat, ali_path):
     """
     Calculates alignments statistics with esl-alistat for all the
     alignments in a given path. Makes pandas dataframe with results.
-    --
-    eslalistat = path to esl-alistat software
-    ali_path = folder with alignemnts
+    
+    eslalistat: path to esl-alistat software
+    ali_path: folder with alignemnts
+
+    return: 
     """
     alistat_df = pd.DataFrame()
     alistat_df["file"] = os.listdir(ali_path)
     alistat_df["name"] = alistat_df["file"].str.replace(r"[.].*", "")
+
     for i in range(0, len(alistat_df)):
         cmd = eslalistat + " --rna %s%s" % (ali_path, alistat_df["file"][i])
         result = os.popen(cmd).readlines()
         values = []
+
         for line in result:
             values.append(line.split()[-1])
+
         num_seq = int(values[2])
         alen = int(values[3])
         diff = int(values[6]) - float(values[5])
@@ -62,11 +68,13 @@ def easel_stats(eslalistat, ali_path):
         alistat_df.set_value(i, "avlen", avlen)
         alistat_df.set_value(i, "lenalen_ratio", lenalen_ratio)
         alistat_df.set_value(i, "avid", avid)
+
     alistat_df["num_seq"] = alistat_df["num_seq"].astype(int)
     alistat_df["alen"] = alistat_df["alen"].astype(int)
     alistat_df["diff"] = alistat_df["diff"].astype(int)
     alistat_df["lenalen_ratio"] = alistat_df["lenalen_ratio"].round(2)
     alistat_df["avid"] = alistat_df["avid"].astype(int)
+    
     return alistat_df
 
 
@@ -75,7 +83,9 @@ def mark_w_groups(components_l, alistat_df):
     Appends group membership from list to alignment stats.
     """
     groups_df = alistat_df.copy()
+
     for i in range(0, len(groups_df)):
+
         for sublist in components_l:
             if groups_df["name"][i] in sublist:
                 groups_df.set_value(i, "group", components_l.index(sublist))
@@ -111,7 +121,7 @@ def select_ali(groups_df):
     """
     selected_df = groups_df.sort_values(["group", "num_seq", "lenalen_ratio"],
                                         ascending=[1, 0, 0])
-    # .. only alignments with less than 40% gaps
+    # only alignments with less than 40% gaps
     selected_df = selected_df[selected_df["lenalen_ratio"] > 0.40]
     # .. only alignments with less than 100% id
     selected_df = selected_df[selected_df["avid"] < 100]
@@ -132,11 +142,15 @@ def fetch_selected(ali_path, selected_df, selali_path):
     """
     Takes the df of selected alignments, makes new folders and makes
     copies of them into a folder.
+
     """
     os.mkdir(selali_path)
     for i in selected_df["file"]:
+        aliname = i.split(os.extsep, 1)[0]
+        selfdir = os.path.join(selali_path, aliname)
+        os.mkdir(selfdir)
         move_from = os.path.join(ali_path, i)
-        move_to = os.path.join(selali_path, i)
+        move_to = os.path.join(selfdir, i)
         shutil.copy(move_from, move_to)
 
 # .........................................................................
