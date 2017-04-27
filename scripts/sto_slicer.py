@@ -16,7 +16,7 @@ import sys
 # .............................FUNCTIONS...................................
 
 
-def slice_sto(stofile):
+def slice_sto(stofile, dirpath):
     """
     Takes concatenated stockholm file and slices it
     into individual .sto files named after the first sequence
@@ -26,8 +26,7 @@ def slice_sto(stofile):
     out_dir: directory were individual files will be saved
     """
     # open and read alignment
-    out_dir = "all_alignments"
-    os.mkdir(out_dir)
+    os.mkdir(dirpath)
     ali = open(stofile)
     alicontent = ali.read()
     commpatt = re.compile(r"#=GR.*\n")
@@ -53,7 +52,7 @@ def slice_sto(stofile):
     names = [s + ".sto" for s in names]
     # write files
     for i in range(0, len(filelist) - 1):
-        seqinfofile = open(os.path.join(out_dir, names[i]), 'w')
+        seqinfofile = open(os.path.join(dirpath, names[i]), 'w')
         seqinfofile.write(filelist[i])
         seqinfofile.write("//")
         seqinfofile.close()
@@ -62,4 +61,5 @@ def slice_sto(stofile):
 
 if __name__ == '__main__':
     STOFILE = sys.argv[1]
-    slice_sto(STOFILE)
+    DIR = sys.argv[2]
+    slice_sto(STOFILE, DIR)
