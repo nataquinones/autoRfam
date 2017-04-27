@@ -14,7 +14,7 @@ import sys
 # .............................FUNCTIONS...................................
 
 
-def nhmmer_allvsall(nhmmer_path, fastafile):
+def main(nhmmer_path, fastafile, results_path):
     """
     Runs NHMMER with fasta file vs. itself, with options:
     -o: save output file
@@ -29,10 +29,10 @@ def nhmmer_allvsall(nhmmer_path, fastafile):
     fasta: fasta file with sequences to be used as query and target
     """
     # output dir and files
-    os.mkdir("nhmmer_results")
-    out_file = os.path.join("nhmmer_results", "nhmmer.out")
-    sto_file = os.path.join("nhmmer_results", "nhmmer.sto")
-    tbl_file = os.path.join("nhmmer_results", "nhmmer.tbl")
+    os.mkdir(results_path)
+    out_file = os.path.join(results_path, "nhmmer.out")
+    sto_file = os.path.join(results_path, "nhmmer.sto")
+    tbl_file = os.path.join(results_path, "nhmmer.tbl")
     # process
     nhmmer_template = nhmmer_path + " -o %s"\
                                     " -A %s"\
@@ -55,4 +55,5 @@ def nhmmer_allvsall(nhmmer_path, fastafile):
 if __name__ == '__main__':
     NHMMER_PATH = sys.argv[1]
     FASTA_FILE = sys.argv[2]
-    nhmmer_allvsall(NHMMER_PATH, FASTA_FILE)
+    RESULTS_PATH = sys.argv[3]
+    main(NHMMER_PATH, FASTA_FILE, RESULTS_PATH)
