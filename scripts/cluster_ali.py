@@ -101,7 +101,7 @@ def find_cliques(graph, rev_map_dict):
     return cliques_names
 
 
-def main(tsvin):
+def main(tsvin, listout):
         df_tbl = read_tsv(tsvin)
         mapping = map_urstoint(df_tbl)
         map_dict = mapping[0]
@@ -109,13 +109,13 @@ def main(tsvin):
         rev_map_dict = mapping[2]
         graph = make_matrix(df_tbl, q_list, map_dict)
         comp_list = find_components(graph, rev_map_dict)
-        return comp_list
+        with open(listout, 'wb') as f:
+            pickle.dump(comp_list, f)
 
 # .........................................................................
 
 if __name__ == '__main__':
     IN_TSV = sys.argv[1]
     COMP_OUT = os.path.join(os.path.dirname(IN_TSV), "comp.list")
-    COMP_LIST = main(IN_TSV)
-    with open(COMP_OUT, 'wb') as f:
-            pickle.dump(COMP_LIST, f)
+    main(IN_TSV, COMP_OUT)
+    
