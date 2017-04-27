@@ -68,10 +68,11 @@ def markbest_perquery(df_tbl, report=False):
     return df_bestmark
 
 
-def main(tsvin):
+def main(tsvin, tsvout):
         df_tbl = read_tsv(tsvin)
         add_len(df_tbl)
         df_bestmark = markbest_perquery(df_tbl)
+        df_bestmark.to_csv(tsvout, sep='\t', index=False)
         return df_bestmark
 
 # .........................................................................
@@ -79,5 +80,4 @@ def main(tsvin):
 if __name__ == '__main__':
     IN_TSV = sys.argv[1]
     OUT_TSV = sys.argv[2]
-    OUT_DF = main(IN_TSV)
-    OUT_DF.to_csv(OUT_TSV, sep='\t', index=False)
+    OUT_DF = main(IN_TSV, OUT_TSV)
