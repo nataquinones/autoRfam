@@ -14,7 +14,7 @@ import sys
 # .............................FUNCTIONS...................................
 
 
-def main(nhmmer_path, fastafile, results_path):
+def main(nhmmer_path, fastafile, results_path, results_name):
     """
     Runs NHMMER with fasta file vs. itself, with options:
     -o: save output file
@@ -30,9 +30,9 @@ def main(nhmmer_path, fastafile, results_path):
     """
     # output dir and files
     os.mkdir(results_path)
-    out_file = os.path.join(results_path, "nhmmer.out")
-    sto_file = os.path.join(results_path, "nhmmer.sto")
-    tbl_file = os.path.join(results_path, "nhmmer.tbl")
+    out_file = os.path.join(results_path, results_name + ".out")
+    sto_file = os.path.join(results_path, results_name + ".sto")
+    tbl_file = os.path.join(results_path, results_name + ".tbl")
     # process
     nhmmer_template = nhmmer_path + " -o %s"\
                                     " -A %s"\
@@ -56,4 +56,5 @@ if __name__ == '__main__':
     NHMMER_PATH = sys.argv[1]
     FASTA_FILE = sys.argv[2]
     RESULTS_PATH = sys.argv[3]
-    main(NHMMER_PATH, FASTA_FILE, RESULTS_PATH)
+    RESULTS_NAME = sys.argv[4]
+    main(NHMMER_PATH, FASTA_FILE, RESULTS_PATH, RESULTS_NAME)
