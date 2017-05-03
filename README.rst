@@ -14,10 +14,10 @@ Use
   git clone https://github.com/nataquinones/autoRfam.git
 
   # 2. Create a new virtual environment
-  virtualenv /path/to/new/autorfam-virtualenv/
+  virtualenv /path/to/new/autorfam-venv/
 
   # 3. Activate virtual environment
-  source /path/to/new/autorfam-virtualenv/bin/activate
+  source /path/to/new/autorfam-venv/bin/activate
 
   # 4. Install python dependencies
   cd /path/to/autoRfam/
