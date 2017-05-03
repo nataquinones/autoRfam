@@ -20,7 +20,7 @@ def read_tsv(tsvin):
     """
     Read tsv file into pandas df
     """
-    df_tbl = pd.read_csv(tsvin, sep="\t")
+    df_tbl = pd.read_csv(tsvin, sep="\t", index_col=False)
     return df_tbl
 
 
