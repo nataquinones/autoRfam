@@ -15,6 +15,9 @@ files
 #temp
 test
 setup.py
+autorfam-venv/
+docs/architecture.txt
+docs/structure.txt
 data
 bin
 venv
