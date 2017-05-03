@@ -3,7 +3,6 @@ Description:
 Takes .tsv file with columns "query" and "target"
 (made for nhmmertbl_parse.py output) and gives a .tsv file of the of the
 sequences to remove from alignments
-
 Use:
 marktoclean.py <in> <out>
 <in> .tsv file with columns "query" and "target"
@@ -20,7 +19,7 @@ def read_tsv(tsvin):
     """
     Read tsv file into pandas df
     """
-    df_tbl = pd.read_csv(tsvin, sep="\t")
+    df_tbl = pd.read_csv(tsvin, sep="\t", index_col=False)
     return df_tbl
 
 
