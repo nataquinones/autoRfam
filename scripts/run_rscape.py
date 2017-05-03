@@ -52,7 +52,7 @@ def run_rscape(rscape, alnali):
     subprocess.call(cmd, shell=True)
 
 
-def iterdir(dir_path):
+def iterdir(rscape, dir_path):
     """
     Makes iteration of main function in a directory containing
     directories with an alignment inside.
@@ -60,11 +60,13 @@ def iterdir(dir_path):
     for folder in glob.glob(os.path.join(dir_path, '*')):
         alignments = glob.glob(os.path.join(dir_path, folder, "*.sto"))
         for stoali in alignments:
-            run_rscape(RSCAPE_PATH, stoali)
+            run_rscape(rscape, stoali)
+            with open(os.path.join(dir_path, "rscape.log"), "a") as logfile:
+                logfile.write(stoali+"\n")
 
 # .........................................................................
 
 if __name__ == '__main__':
     RSCAPE_PATH = sys.argv[1]
     DIR_PATH = sys.argv[2]
-    iterdir(DIR_PATH)
+    iterdir(RSCAPE_PATH, DIR_PATH)
