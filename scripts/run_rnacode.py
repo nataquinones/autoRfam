@@ -70,7 +70,7 @@ def main(eslreformat, rnacode, stoali):
     run_rnacode(rnacode, alnali)
 
 
-def iterdir(dir_path):
+def iterdir(eslreformat, rnacode, dir_path):
     """
     Makes iteration of main function in a directory containing
     directories with an alignment inside.
@@ -78,7 +78,9 @@ def iterdir(dir_path):
     for folder in glob.glob(os.path.join(dir_path, '*')):
         alignments = glob.glob(os.path.join(dir_path, folder, "*.sto"))
         for stoali in alignments:
-            main(ESLREF_PATH, RNACODE_PATH, stoali)
+            main(eslreformat, rnacode, stoali)
+            with open(os.path.join(dir_path, "rnacode.log"), "a") as logfile:
+                logfile.write(stoali+"\n")
 
 # .........................................................................
 
@@ -86,4 +88,4 @@ if __name__ == '__main__':
     ESLREF_PATH = sys.argv[1]
     RNACODE_PATH = sys.argv[2]
     DIR_PATH = sys.argv[3]
-    iterdir(DIR_PATH)
+    iterdir(ESLREF_PATH, RNACODE_PATH, DIR_PATH)
