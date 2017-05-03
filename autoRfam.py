@@ -1,5 +1,6 @@
 import luigi
 import os
+import shutil
 import sys
 from scripts import get_fasta
 from scripts import nhmmer_allvsall
@@ -18,17 +19,20 @@ ESLALISTAT = "/Users/nquinones/Documents/hmmer-3.1b2/easel/miniapps/esl-alistat"
 ESLREF_PATH = "/Users/nquinones/Documents/hmmer-3.1b2/easel/miniapps/esl-reformat"
 RSCAPEPATH = "/Users/nquinones/Documents/rscape_v0.3.3/bin/R-scape"
 RNACODE_PATH = "/Users/nquinones/Documents/RNAcode-0.3/src/RNAcode"
+DATA_PATH = "/Users/nquinones/Dropbox/EMBL-EBI/autoRfam/data"
 
-INPUT = sys.argv[1]
-DESTDIR = os.path.join(os.path.dirname(INPUT), "autoRfam")
+INPUT_URS = sys.argv[1]
+DESTDIR = os.path.join(os.path.dirname(INPUT_URS), "autoRfam")
 ALIDIR = os.path.join(DESTDIR, "alignments")
+DATADIR = os.path.join(DESTDIR, "gen_data")
+NAVDIR = os.path.join(DESTDIR, "autoRfamNAV")
 
 
 class GetFasta(luigi.Task):
     """
     """
-    _in = INPUT
-    _out = os.path.join(DESTDIR, "all_seqs.fasta")
+    _in = INPUT_URS
+    _out = os.path.join(DATADIR, "all_seqs.fasta")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -40,19 +44,20 @@ class GetFasta(luigi.Task):
 class NhmmerAll(luigi.Task):
     """
     """
-    outdir = os.path.join(DESTDIR, "nhmmer_results")
+    outdir = os.path.join(DATADIR, "nhmmer_results")
+    outname = "nhmmer"
 
     def output(self):
         return {"tbl": luigi.LocalTarget(os.path.join(self.outdir,
-                                                      "nhmmer.tbl")),
+                                                      self.outname + ".tbl")),
                 "sto": luigi.LocalTarget(os.path.join(self.outdir,
-                                                      "nhmmer.sto"))}
+                                                      self.outname + ".sto"))}
 
     def requires(self):
         return GetFasta()
 
     def run(self):
-        nhmmer_allvsall.main(NHMMERPATH, self.input().path, self.outdir)
+        nhmmer_allvsall.main(NHMMERPATH, self.input().path, self.outdir, self.outname)
 
 
 class StoSlice(luigi.Task):
@@ -73,7 +78,7 @@ class StoSlice(luigi.Task):
 class NhmmerTblParse(luigi.Task):
     """
     """
-    _out = os.path.join(DESTDIR, "clean_hits.tsv")
+    _out = os.path.join(DATADIR, "clean_hits.tsv")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -88,7 +93,7 @@ class NhmmerTblParse(luigi.Task):
 class MarkToClean(luigi.Task):
     """
     """
-    _out = os.path.join(DESTDIR, "seqs_keep.tsv")
+    _out = os.path.join(DATADIR, "seqs_keep.tsv")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -103,7 +108,7 @@ class MarkToClean(luigi.Task):
 class ClusterAli(luigi.Task):
     """
     """
-    _out = os.path.join(DESTDIR, "comp.list")
+    _out = os.path.join(DATADIR, "comp.list")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -134,11 +139,12 @@ class CleanAli(luigi.Task):
 class PickRepAli(luigi.Task):
     """
     """
-    _tsvout = os.path.join(DESTDIR, "groups.tsv")
+    _tsvout = os.path.join(DATADIR, "groups.tsv")
     outdir = os.path.join(ALIDIR, "selected_alignments")
+    outdir2 = os.path.join(NAVDIR, "indiv_pages")
 
     def output(self):
-        return luigi.LocalTarget(self.outdir)
+        return luigi.LocalTarget(os.path.join(self.outdir2))
 
     def requires(self):
         return {"cleanali": CleanAli(),
@@ -146,12 +152,13 @@ class PickRepAli(luigi.Task):
 
     def run(self):
         pick_repali.main(ESLALISTAT, self.input()["complist"].path, self.input()["cleanali"].path, self._tsvout, self.outdir)
+        shutil.copytree(self.outdir, os.path.join(NAVDIR, "indiv_pages"))
 
 
 class RunRscape(luigi.Task):
     """
     """
-    _out = os.path.join(PickRepAli.outdir, "rscape.log")
+    _out = os.path.join(PickRepAli.outdir2, "rscape.log")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -166,7 +173,7 @@ class RunRscape(luigi.Task):
 class RunRNAcode(luigi.Task):
     """
     """
-    _out = os.path.join(PickRepAli.outdir, "rnacode.log")
+    _out = os.path.join(PickRepAli.outdir2, "rnacode.log")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -181,8 +188,8 @@ class RunRNAcode(luigi.Task):
 class AllHtml(luigi.Task):
     """
     """
-    _homepath = os.path.join(DESTDIR, "HOME.html")
-    _hometsv = os.path.join(DESTDIR, "home.tsv")
+    _homepath = os.path.join(NAVDIR, "HOME.html")
+    _hometsv = os.path.join(DATADIR, "home.tsv")
 
     def requires(self):
         return {"selali": PickRepAli(),
@@ -191,10 +198,18 @@ class AllHtml(luigi.Task):
 
     def run(self):
         all_html.main(ESLALISTAT, self.input()["selali"].path, self._homepath, self._hometsv)
+        os.symlink(self._homepath, os.path.join(DESTDIR, "HOME.html"))
+        for file in os.listdir(DATA_PATH):
+            shutil.copy(os.path.join(DATA_PATH, file), os.path.join(NAVDIR, file))
+
 
 if __name__ == '__main__':
     if not os.path.exists(DESTDIR):
         os.mkdir(DESTDIR, 0777)
     if not os.path.exists(ALIDIR):
         os.mkdir(ALIDIR, 0777)
+    if not os.path.exists(DATADIR):
+        os.mkdir(DATADIR, 0777)
+    if not os.path.exists(NAVDIR):
+        os.mkdir(NAVDIR, 0777)
     luigi.run(["--local-scheduler"], main_task_cls=AllHtml)
