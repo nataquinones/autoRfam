@@ -4,6 +4,7 @@ Uses RNAcentral URSs to fetch sequences in FASTA format from RNAcentral API.
 
 Use:
 get_fasta.py <in> <out>
+
 <in> input .txt with (non-species specific) RNAcentral URS, one per line
 <out> output .fasta file with sequences
 """
@@ -16,7 +17,8 @@ import sys
 
 def fasta_seq(txtfile, fastafile):
     """
-    Fetches FASTA format sequences from txt file of RNAcentral URSs.
+    Fetches FASTA format sequences from .txt file of RNAcentral URSs.
+    
     txtfile: input .txt with RNAcentral URS, one per line
     fastafile: output .fasta file with sequences
     """
@@ -31,6 +33,4 @@ def fasta_seq(txtfile, fastafile):
 # .........................................................................
 
 if __name__ == '__main__':
-    IN_TXT = sys.argv[1]
-    OUT_FASTA = sys.argv[2]
-    fasta_seq(IN_TXT, OUT_FASTA)
+    fasta_seq(sys.argv[1], sys.argv[2])
