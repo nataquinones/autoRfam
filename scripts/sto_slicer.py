@@ -26,7 +26,8 @@ def slice_sto(stofile, dirpath):
     out_dir: directory were individual files will be saved
     """
     # open and read alignment
-    os.mkdir(dirpath)
+    if not os.path.exists(dirpath):
+        os.mkdir(dirpath, 0777)
     ali = open(stofile)
     alicontent = ali.read()
     commpatt = re.compile(r"#=GR.*\n")
