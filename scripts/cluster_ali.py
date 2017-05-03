@@ -24,7 +24,12 @@ def read_tsv(tsvin):
     """
     Read tsv file into pandas df
     """
-    df_tbl = pd.read_csv(tsvin, sep="\t", index_col=False)
+    df_tbl = pd.read_csv(tsvin,
+                         sep="\t",
+                         header=0,
+                         index_col=False,
+                         error_bad_lines=False,
+                         usecols=range(4))
     return df_tbl
 
 
