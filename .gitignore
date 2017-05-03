@@ -15,7 +15,6 @@ files
 #temp
 test
 setup.py
-requirements.txt
 data
 bin
 venv
