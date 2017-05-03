@@ -4,6 +4,7 @@ import re
 import requests
 import pandas as pd
 import os
+import shutil
 import sys
 import glob
 
@@ -13,7 +14,6 @@ PUBLICATIONS_PAGESIZE = 10
 pd.set_option('max_colwidth', -1)
 RSCAPE_FOLDER = "rscape"
 RNACODE_FOLDER = "rnacode"
-HOME_PATH = "HOME.html"
 
 # .............................FUNCTIONS...................................
 
@@ -248,7 +248,7 @@ def check_rscape(stoali):
     return rscapewarn
 
 
-def make_html(eslalistat, stoali):
+def make_html(eslalistat, stoali, homehtml):
     """
     """
 
@@ -316,7 +316,7 @@ def make_html(eslalistat, stoali):
         rscape_html = "R-scape image not available"
 
     # .. OTHER HTML
-    browse_ali = "../../HOME.html"
+    browse_ali = str(homehtml)
     header = """
              <html>
                    <head>
@@ -483,7 +483,7 @@ def write_homeinfo(infoline, out_tsv):
         f.close()
 
 
-def iterdir(dir_path):
+def iterdir(eslalistat, hometsv, dir_path, homehtml):
     """
     Makes iteration of main function in a directory containing
     directories with an alignment inside.
@@ -492,11 +492,12 @@ def iterdir(dir_path):
         alignments = glob.glob(os.path.join(folder, "*.sto"))
 
         for filesto in alignments:
-            infoline = make_html(ESLALISTAT_PATH, filesto)
-            write_homeinfo(infoline, HOMETSV)
+            shutil.copy(filesto, filesto + ".txt")
+            infoline = make_html(eslalistat, filesto, homehtml)
+            write_homeinfo(infoline, hometsv)
 
 
-def home_table(hometsv):
+def home_table(dirpath, hometsv):
     browse_df = pd.read_csv(hometsv,
                             sep="\t",
                             header=None)
@@ -519,7 +520,7 @@ def home_table(hometsv):
     browse_df["name"] = browse_df["name"].str.replace(r"\[subseq from\]", "")
     browse_df["path"] = browse_df["file"].str.replace(r".cl.sto", "").astype(str)
     browse_df["path"] = browse_df["path"].str.replace(r".sto", "").astype(str)
-    browse_df["path"] = DIR_PATH + "/" + browse_df["path"] + "/" + browse_df["file"].astype(str) + ".html"
+    browse_df["path"] = dirpath + "/" + browse_df["path"] + "/" + browse_df["file"].astype(str) + ".html"
 
     browse_df["file"] = "<a href=\"" + browse_df["path"] + "\">" + browse_df["file"] + "</a>"
     del browse_df["path"]
@@ -538,10 +539,10 @@ def home_table(hometsv):
     return browse_df
 
 
-def home_html(hometsv):
+def home_html(dirpath, homehtml, hometsv):
     """
     """
-    browse_df = home_table(hometsv)
+    browse_df = home_table(dirpath, hometsv)
     browse_html = browse_df.to_html(header=True,
                                     index=False,
                                     escape=False,
@@ -595,10 +596,7 @@ def home_html(hometsv):
                                          background-color: #822424;
                                          color: white;
                                          font-family:helvetica;}
-                                     th:not(.sorttable_sorted):
-                                        not(.sorttable_sorted_reverse):
-                                        not(.sorttable_nosort):
-                                        after {
+                                     th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
                                         content: ' \\25B9'}
             </style>
             """
@@ -609,7 +607,7 @@ def home_html(hometsv):
              """
 
     # ....Writing HTML File
-    with open(HOME_PATH, 'w') as f:
+    with open(homehtml, 'w') as f:
         f.write(header)
         f.write(body)
         f.write(style)
@@ -628,11 +626,17 @@ def home_html(hometsv):
         f.write(browse_html+"\n")
         f.write(footer)
 
+
+def main(eslalistat, dirpath, homehtml, hometsv):
+    """
+    """
+    iterdir(eslalistat, hometsv, dirpath, homehtml)
+    home_html(dirpath, homehtml, hometsv)
+
 # .........................................................................
 
 if __name__ == '__main__':
     ESLALISTAT_PATH = sys.argv[1]
     DIR_PATH = sys.argv[2]
     HOMETSV = sys.argv[3]
-    iterdir(DIR_PATH)
-    home_html(HOMETSV)
+    main(ESLALISTAT_PATH, DIR_PATH, homehtml, HOMETSV)
