@@ -4,28 +4,6 @@ Description
 -----------
 TO_DO
 
-Use
----
-
-.. code:: bash
-
-  # 1. Clone or download repository
-  cd path/to/
-  git clone https://github.com/nataquinones/autoRfam.git
-
-  # 2. Create a new virtual environment
-  virtualenv /path/to/new/autorfam-venv/
-
-  # 3. Activate virtual environment
-  source /path/to/new/autorfam-venv/bin/activate
-
-  # 4. Install python dependencies
-  cd /path/to/autoRfam/
-  pip install -r requirements.txt
-
-  # 5. Run
-  python /path/to/autoRfam/autoRfam.py /path/to/URS_list.txt 
-
 Requirements
 ------------
 - ``python 2.7.9``
@@ -40,6 +18,31 @@ Requirements
 - ``R-scape v0.3.3``
 
 - ``RNAcode-0.3``
+
+
+Use
+---
+
+.. code:: bash
+
+  # 1. Clone or download repository
+  cd path/to/
+  git clone https://github.com/nataquinones/autoRfam.git
+
+  # 2. Modify `data/paths.py <https://github.com/nataquinones/autoRfam/blob/master/data/paths.py>`_ with corresponding paths
+
+  # 3. Create a new virtual environment
+  virtualenv /path/to/new/autorfam-venv/
+
+  # 4. Activate virtual environment
+  source /path/to/new/autorfam-venv/bin/activate
+
+  # 5. Install python dependencies
+  cd /path/to/autoRfam/
+  pip install -r requirements.txt
+
+  # 6. Run
+  python /path/to/autoRfam/autoRfam.py /path/to/URS_list.txt 
 
 
 Scripts
