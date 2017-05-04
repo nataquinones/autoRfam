@@ -57,29 +57,26 @@ def easel_stats(eslalistat, ali_path):
     for i in range(0, len(alistat_df)):
         cmd = eslalistat + " --rna %s%s" % (ali_path, alistat_df["file"][i])
         result = os.popen(cmd).readlines()
-        # make list and append values from subprocess
-        values = []
-        for line in result:
-            values.append(line.split()[-1])
-        # from list, select and format relevant information
-        num_seq = int(values[2])
-        alen = int(values[3])
-        diff = int(values[6]) - float(values[5])
-        avlen = float(values[7])
-        lenalen_ratio = avlen / alen
-        avid = int(values[8].strip("%"))
-        alistat_df.set_value(i, "num_seq", num_seq)
-        alistat_df.set_value(i, "alen", alen)
-        alistat_df.set_value(i, "diff", diff)
-        alistat_df.set_value(i, "avlen", avlen)
-        alistat_df.set_value(i, "lenalen_ratio", lenalen_ratio)
-        alistat_df.set_value(i, "avid", avid)
-    # add results to dataframe
-    alistat_df["num_seq"] = alistat_df["num_seq"].astype(int)
-    alistat_df["alen"] = alistat_df["alen"].astype(int)
-    alistat_df["diff"] = alistat_df["diff"].astype(int)
-    alistat_df["lenalen_ratio"] = alistat_df["lenalen_ratio"].round(2)
-    alistat_df["avid"] = alistat_df["avid"].astype(int)
+        if len(result) != 0:
+            # make list and append values from subprocess
+            values = []
+            for line in result:
+                values.append(line.split()[-1])
+            # from list, select and format relevant information
+            num_seq = int(values[2])
+            alen = int(values[3])
+            diff = int(values[6]) - float(values[5])
+            avlen = float(values[7])
+            lenalen_ratio = avlen / alen
+            avid = int(values[8].strip("%"))
+            alistat_df.set_value(i, "num_seq", num_seq)
+            alistat_df.set_value(i, "alen", alen)
+            alistat_df.set_value(i, "diff", diff)
+            alistat_df.set_value(i, "avlen", avlen)
+            alistat_df.set_value(i, "lenalen_ratio", lenalen_ratio)
+            alistat_df.set_value(i, "avid", avid)
+        # add results to dataframe
+        alistat_df["lenalen_ratio"] = alistat_df["lenalen_ratio"].round(2)
 
     return alistat_df
 
