@@ -29,12 +29,17 @@ Use
 Requirements
 ------------
 - ``python 2.7.9``
-  - The Python dependencies are specified in requirements.txt and can be installed in a virtual environment as previously described.
-- From ``HMMER-3.1b2``: 
-    - `nhmmer``
-    - ``esl-alistat`` and ``esl-reformat`` from the Easel library
-- R-scape v0.3.3
-- RNAcode-0.3
+
+  - The ``python`` dependencies are specified in `requirements.txt <https://github.com/nataquinones/autoRfam/blob/master/requirements.txt>`_ and can be installed in a virtual environment as previously described.
+ 
+- From ``HMMER-3.1b2``
+
+  - ``nhmmer``
+  - ``esl-alistat`` and ``esl-reformat`` from the Easel library
+ 
+- ``R-scape v0.3.3``
+
+- ``RNAcode-0.3``
 
 
 Scripts
