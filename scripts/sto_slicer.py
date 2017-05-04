@@ -36,6 +36,8 @@ def slice_sto(stofile, dirpath):
     alicontent = commpatt2.sub("", alicontent)
     commpatt3 = re.compile(r"#=GC RF.*\n")
     alicontent = commpatt3.sub("", alicontent)
+    commpatt5 = re.compile(r"\d\|")
+    alicontent = commpatt5.sub("", alicontent)
     # pattern to identify end of alignment, split
     endpatt = re.compile("\/\/\n")
     filelist = endpatt.split(alicontent)
