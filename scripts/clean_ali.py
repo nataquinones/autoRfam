@@ -38,17 +38,19 @@ def cleanup(df_tbl, allali_path, selali_path):
         ali_file = os.path.join(allali_path, urs + ".sto")
         clean_ali_file = os.path.join(selali_path, urs + ".cl.sto")
         # process to delete lines with bad seqs
-        with open(ali_file) as oldfile, open(clean_ali_file, 'w') as newfile:
-            for line in oldfile:
-                if not any(seq in line for seq in bad_seqs):
-                    newfile.write(line)
+        if os.path.exists(ali_file):
+            with open(ali_file) as oldfile, open(clean_ali_file, 'w') as newfile:
+                for line in oldfile:
+                    if not any(seq in line for seq in bad_seqs):
+                        newfile.write(line)
 
     # select files that need no modifications to copy
     to_move = set(df_tbl["alignment"]) - set(df_todel["alignment"])
     for urs in to_move:
         move_from = os.path.join(allali_path, urs + ".sto")
         move_to = os.path.join(selali_path, urs + ".sto")
-        shutil.copy(move_from, move_to)
+        if os.path.exists(move_from):
+            shutil.copy(move_from, move_to)
 
 
 def main(tsvin, allali_path, selali_path):
