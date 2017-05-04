@@ -22,7 +22,8 @@ RNACODE_PATH = "/Users/nquinones/Documents/RNAcode-0.3/src/RNAcode"
 DATA_PATH = "/Users/nquinones/Dropbox/EMBL-EBI/autoRfam/data"
 
 INPUT_URS = sys.argv[1]
-DESTDIR = os.path.join(os.path.dirname(INPUT_URS), "autoRfam")
+INPUT_ABS = os.path.abspath(INPUT_URS)
+DESTDIR = os.path.join(os.path.dirname(INPUT_ABS), "autoRfam")
 ALIDIR = os.path.join(DESTDIR, "alignments")
 DATADIR = os.path.join(DESTDIR, "gen_data")
 NAVDIR = os.path.join(DESTDIR, "autoRfamNAV")
@@ -31,7 +32,7 @@ NAVDIR = os.path.join(DESTDIR, "autoRfamNAV")
 class GetFasta(luigi.Task):
     """
     """
-    _in = INPUT_URS
+    _in = INPUT_ABS
     _out = os.path.join(DATADIR, "all_seqs.fasta")
 
     def output(self):
