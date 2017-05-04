@@ -23,7 +23,8 @@ DATA_PATH = "/Users/nquinones/Dropbox/EMBL-EBI/autoRfam/data"
 
 INPUT_URS = sys.argv[1]
 INPUT_ABS = os.path.abspath(INPUT_URS)
-DESTDIR = os.path.join(os.path.dirname(INPUT_ABS), "autoRfam")
+NAME = os.path.splitext(os.path.basename(INPUT_ABS))[0]
+DESTDIR = os.path.join(os.path.dirname(INPUT_ABS), "autoRfam_%s" % NAME)
 ALIDIR = os.path.join(DESTDIR, "alignments")
 DATADIR = os.path.join(DESTDIR, "gen_data")
 NAVDIR = os.path.join(DESTDIR, "autoRfamNAV")
