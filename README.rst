@@ -29,7 +29,12 @@ Use
   cd path/to/
   git clone https://github.com/nataquinones/autoRfam.git
 
-  # 2. Modify `data/paths.py <https://github.com/nataquinones/autoRfam/blob/master/data/paths.py>`_ with corresponding paths
+  # 2. Modify data/paths.py with corresponding paths
+  nhmmerpath = "~/hmmer-3.1b2/binaries/nhmmer"
+  eslalistat = "~/hmmer-3.1b2/easel/miniapps/esl-alistat"
+  eslref = "~/hmmer-3.1b2/easel/miniapps/esl-reformat"
+  rscapepath = "~/rscape_v0.3.3/bin/R-scape"
+  rnacodepath = "~/RNAcode-0.3/src/RNAcode"
 
   # 3. Create a new virtual environment
   virtualenv /path/to/new/autorfam-venv/
