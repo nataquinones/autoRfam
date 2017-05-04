@@ -10,7 +10,7 @@ Thumbs.db
 *.py[cod]
 
 # project
-files
+files/_dep
 
 #temp
 test
