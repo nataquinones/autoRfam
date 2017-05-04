@@ -1,0 +1,5 @@
+nhmmerpath = "/Users/nquinones/Documents/hmmer-3.1b2/binaries/nhmmer"
+eslalistat = "/Users/nquinones/Documents/hmmer-3.1b2/easel/miniapps/esl-alistat"
+eslref = "/Users/nquinones/Documents/hmmer-3.1b2/easel/miniapps/esl-reformat"
+rscapepath = "/Users/nquinones/Documents/rscape_v0.3.3/bin/R-scape"
+rnacodepath = "/Users/nquinones/Documents/RNAcode-0.3/src/RNAcode"

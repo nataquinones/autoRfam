@@ -13,13 +13,15 @@ from scripts import pick_repali
 from scripts import run_rscape
 from scripts import run_rnacode
 from scripts import all_html
+import data
+from data import paths
 
-NHMMERPATH = "/Users/nquinones/Documents/hmmer-3.1b2/binaries/nhmmer"
-ESLALISTAT = "/Users/nquinones/Documents/hmmer-3.1b2/easel/miniapps/esl-alistat"
-ESLREF_PATH = "/Users/nquinones/Documents/hmmer-3.1b2/easel/miniapps/esl-reformat"
-RSCAPEPATH = "/Users/nquinones/Documents/rscape_v0.3.3/bin/R-scape"
-RNACODE_PATH = "/Users/nquinones/Documents/RNAcode-0.3/src/RNAcode"
-DATA_PATH = "/Users/nquinones/Dropbox/EMBL-EBI/autoRfam/data"
+NHMMERPATH = paths.nhmmerpath
+ESLALISTAT = paths.eslalistat
+ESLREF_PATH = paths.eslref
+RSCAPEPATH = paths.rscapepath
+RNACODE_PATH = paths.rnacodepath
+DATA_PATH = os.path.dirname(os.path.abspath(data.__file__))
 
 INPUT_URS = sys.argv[1]
 INPUT_ABS = os.path.abspath(INPUT_URS)
