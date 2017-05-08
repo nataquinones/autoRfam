@@ -72,7 +72,7 @@ Scripts
 |                     |      | ``nhmmer`` ``.sto`` file, from ``-A`` option                                       | example  |
 |                     |      +------------------------------------------------------------------------------------+----------+
 |                     |      | ``nhmmer`` ``.tbl`` file, from ``--tblout`` option                                 | example  |
-|                     +------+-----------------------------------------------------------------------------------------------+
+|                     +------+------------------------------------------------------------------------------------+----------+
 |                     |*Use:*| ``nhmmer_allvsall.py <nhmmerpath> <in> <out_path> <out_name>``                                |
 |                     |      +-----------------------------------------------------------------------------------------------+
 |                     |      | ``<nhmmerpath>``: Path to ``nhmmer`` from ``HMMER-3.1b2``                                     |
@@ -83,16 +83,14 @@ Scripts
 |                     |      +-----------------------------------------------------------------------------------------------+
 |                     |      | ``<out_name>``: Name of the output files **i.e.** ``name.sto, name.sto, name.tbl``            |
 +---------------------+------+------------------------------------------------------------------------------------+----------+
-| sto_slicer.py_      | Takes a concatenated ``.sto`` file and slices it into all the individual alignments, saves them in   |
-|                     |
+| sto_slicer.py_      | Takes a concatenated ``.sto`` file and slices it into all the individual alignments, names them in   |
+|                     | based on the first sequence of alignment.                                                            |
 |                     +------+------------------------------------------------------------------------------------+----------+
 |                     | in:  | List of non species-specific RNAcentral URSs, one per line                         | example  |
 |                     +------+------------------------------------------------------------------------------------+----------+
 |                     | out: | ``.fasta`` file                                                                    | example  |
 +---------------------+------+------------------------------------------------------------------------------------+----------+
 
-
- a folder with the name of the original file, names each individual alignment based on the first sequence of alignment.
 
 +---------------------+
 | nhmmertbl_parse.py_ |
