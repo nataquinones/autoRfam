@@ -55,7 +55,7 @@ Scripts
 
 +---------------------+------------------------------------------------------------------------------------------------------+
 | get_fasta.py_       | Takes file of RNAcentral URSs, fetches the sequences in ``.fasta`` format and saves them into file.  |
-|                     +------+-----------------------------------------------------------------------------------------------+
+|                     +------+------------------------------------------------------------------------------------+----------+
 |                     | in:  | List of non species-specific RNAcentral URSs, one per line                         | example  |
 |                     +------+------------------------------------------------------------------------------------+----------+
 |                     | out: | ``.fasta`` file                                                                    | example  |
@@ -91,7 +91,6 @@ Scripts
 |                     | out: | ``.fasta`` file                                                                    | example  |
 +---------------------+------+------------------------------------------------------------------------------------+----------+
 
-NHMMER_PATH, FASTA_FILE, RESULTS_PATH, RESULTS_NAME
 
  a folder with the name of the original file, names each individual alignment based on the first sequence of alignment.
 
