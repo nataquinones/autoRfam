@@ -638,5 +638,6 @@ def main(eslalistat, dirpath, homehtml, hometsv):
 if __name__ == '__main__':
     ESLALISTAT_PATH = sys.argv[1]
     DIR_PATH = sys.argv[2]
-    HOMETSV = sys.argv[3]
+    homehtml = sys.argv[3]
+    HOMETSV = sys.argv[4]
     main(ESLALISTAT_PATH, DIR_PATH, homehtml, HOMETSV)
