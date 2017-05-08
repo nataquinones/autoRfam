@@ -53,14 +53,42 @@ Use
 Scripts
 -------
 
-+---------------+
-| get_fasta.py_ |
-+---------------+
-
++---------------------+
+| get_fasta.py_       |
++---------------------+
+| nhmmer_allvsall.py_ |
++---------------------+
+| sto_slicer.py       |
++---------------------+
+| nhmmertbl_parse.py_ |
++---------------------+
+| martoclean.py_      |
++---------------------+
+| cluster_ali.py_     |
++---------------------+
+| clean_ali.py_       |
++---------------------+
+| pick_reprali.py_    |
++---------------------+
+| run_rscape.py_      |
++---------------------+
+| run_rnacode.py_     |
++---------------------+
+| all_html.py_        |
++---------------------+
 
 
 .. _get_fasta.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/get_fasta.py
-
+.. _nhmmer_allvsall.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/nhmmer_allvsall.py
+.. _sto_slicer.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/sto_slicer.py
+.. _nhmmertbl_parse.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/nhmmertbl_parse.py
+.. _martoclean.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/martoclean.py
+.. _cluster_ali.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/cluster_ali.py
+.. _clean_ali.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/clean_ali.py
+.. _pick_reprali.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/pick_reprali.py
+.. _run_rscape.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/run_rscape.py
+.. _run_rnacode.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/run_rnacode.py
+.. _all_html.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/all_html.py
 
 Pipeline
 ---------
