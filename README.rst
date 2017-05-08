@@ -170,7 +170,7 @@ Individual scripts
 |                     |        | ``<in_dir>``: Directory of directories to process                                           |
 +---------------------+--------+---------------------------------------------------------------------------------------------+
 | all_html.py_        | For a directory of directories with ``.sto`` alignments, ``rscape\`` and ``rnacode\`` results        |
-|                     | it generates a tree of html files as well as a ``HOME.html`` entry point.
+|                     | it generates a tree of html files as well as a ``HOME.html`` entry point.                            |
 |                     +--------+---------------------------------------------------------------------------------------------+
 |                     |**Use:**| ``all_html.py <esl-alistat> <in_dir> <home_html> <home_tsv>``                               |
 |                     +--------+---------------------------------------------------------------------------------------------+
