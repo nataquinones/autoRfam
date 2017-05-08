@@ -50,8 +50,8 @@ Use
   python /path/to/autoRfam/autoRfam.py /path/to/URS_list.txt 
 
 
-Scripts
--------
+Individual scripts
+------------------
 
 +---------------------+------------------------------------------------------------------------------------------------------+
 | get_fasta.py_       | Takes file of RNAcentral URSs, fetches the sequences in ``.fasta`` format and saves them into file.  |
@@ -88,10 +88,19 @@ Scripts
 |                     |        +---------------------------------------------------------------------------------------------+
 |                     |        | ``<out_path>``: Path where all the sliced ``.sto`` files will be saved                      |
 +---------------------+--------+---------------------------------------------------------------------------------------------+
+| nhmmertbl_parse.py_ | Takes ``nhmmer --tblout``'s output and processes it into ``.tsv`` file to be used for                |
+|                     | ``networkx`` processing. (Removes non significant hits, removes lines of query sequences that        |
+|                     | only have self-hits, leaves only columns of query, target, and alignment from-to.                    |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |**Use:**| ``nhmmertbl_parse.py <in> <out>``                                                           |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |        | ``<in>``: Input ``nhmmer --tblout``                                                         |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<out>``: Processed ``.tsv file``                                                          |
++---------------------+--------+---------------------------------------------------------------------------------------------+
 
 
-+---------------------+
-| nhmmertbl_parse.py_ |
+
 +---------------------+
 | martoclean.py_      |
 +---------------------+
@@ -120,6 +129,6 @@ Scripts
 .. _run_rnacode.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/run_rnacode.py
 .. _all_html.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/all_html.py
 
-Pipeline
----------
+Luigi pipeline
+--------------
 .. image::  https://github.com/nataquinones/autoRfam/blob/master/docs/pipeline_diagram.png 
