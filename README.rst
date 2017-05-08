@@ -90,7 +90,7 @@ Individual scripts
 +---------------------+--------+---------------------------------------------------------------------------------------------+
 | nhmmertbl_parse.py_ | Takes ``nhmmer --tblout``'s output and processes it into ``.tsv`` file to be used for                |
 |                     | ``networkx`` processing. (Removes non significant hits, removes lines of query sequences that        |
-|                     | only have self-hits, leaves only columns of query, target, and alignment from-to.                    |
+|                     | only have self-hits, leaves only columns of query, target, and alignment from-to.)                   |
 |                     +--------+---------------------------------------------------------------------------------------------+
 |                     |**Use:**| ``nhmmertbl_parse.py <in> <out>``                                                           |
 |                     +--------+---------------------------------------------------------------------------------------------+
@@ -98,15 +98,45 @@ Individual scripts
 |                     |        +---------------------------------------------------------------------------------------------+
 |                     |        | ``<out>``: Processed ``.tsv file``                                                          |
 +---------------------+--------+---------------------------------------------------------------------------------------------+
+| martoclean.py_      | Takes the output of nhmmertbl_parse.py_ . If a query has repetead hits of a same target sequence,    |
+|                     | it picks and marks with a ``*`` the one of greater length.                                           |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |**Use:**| ``nhmmertbl_parse.py <in> <out>``                                                           |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |        | ``<in>``: Processed ``.tsv file`` obtained through nhmmertbl_parse.py_                      |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<out>``: Marked ``.tsv file`` (Added column with ``*`` next to the sequence               |
+|                     |        | that is to be kept.)                                                                        |
++---------------------+--------+---------------------------------------------------------------------------------------------+
+| cluster_ali.py_     | Takes ``.tsv`` file with column "query and "target" (the output of nhmmertbl_parse.py_) to compute   |
+|                     | a sparse matrix and get the connected components with networkx. Gives list of lists                  |
+|                     | representing groups.                                                                                 |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |**Use:**| ``cluster_ali.py <in>``                                                                     |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |        | ``<in>``: Processed ``.tsv file`` obtained through nhmmertbl_parse.py_                      |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | *Output:* In the same directory of the input, it makes a file called ``comp.list`` with     |
+|                     |        | a pickle file list of lists                                                                 |
++---------------------+--------+---------------------------------------------------------------------------------------------+
+| clean_ali.py_       | Takes marked ``.tsv`` file (the output of martoclean.py_) and the path to a directory with its       |
+|                     | corresponding alignments. It deletes the unmarked sequences (with no ``*``) and makes a copy of      |
+|                     | the alignments in a new directory called "clean_alignments". A ``.cl`` extension is added to         |
+|                     | the alignments that were cleaned.                                                                    |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |**Use:**| ``clean_ali.py <in_tsv> <in_ali>``                                                          |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |        | ``<in_tsv>``: The ``.tsv file`` obtained through martoclean.py_                             |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<in_ali>``: Directory with corresponding alingments                                       |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | *Output:* In the same directory of the input, it makes a directory called                   |
+|                     |        | ``clean_alignments`` with copies of the processed alignments inside.                        |
++---------------------+--------+---------------------------------------------------------------------------------------------+
 
 
 
-+---------------------+
-| martoclean.py_      |
-+---------------------+
-| cluster_ali.py_     |
-+---------------------+
-| clean_ali.py_       |
+
 +---------------------+
 | pick_reprali.py_    |
 +---------------------+
