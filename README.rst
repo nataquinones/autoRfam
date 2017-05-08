@@ -197,57 +197,58 @@ Individual scripts
 
 Luigi pipeline
 --------------
+.. image::  https://github.com/nataquinones/autoRfam/blob/master/docs/pipeline_diagram.png 
+
 Directory structure 
 ^^^^^^^^^^^^^^^^^^^
 IN: ``URStest.txt``
-OUT:
 
+OUT:
 .. code::
 
-  autoRfam_URStest/
-  ├── alignments/
-  │   ├── all_alignments/
-  │   │   ├── *.sto
-  │   │   └── ...
-  │   ├── clean_alignments/
-  │   │   ├── *.sto
-  │   │   ├── *.cl.sto
-  │   │   └── ...
-  │   ├── selected_alignments/
-  │   │   ├── URSxxxxxxxxxx/
-  │   │   │   └── URSxxxxxxxxxx.sto
-  │   │   └── ...
-  │   │       └── ...
-  │   └── one.py
-  ├── autoRfamNAV/
-  │   ├── help.html
-  │   ├── HOME.html
-  │   ├── indiv_pages/
-  │   │   ├── rnacode.log
-  │   │   ├── rscape.log
-  │   │   ├── URSxxxxxxxxxx/
-  │   │   │   ├── rnacode/
-  │   │   │   │   ├── (hss-0.eps)
-  │   │   │   │   └── rnacode.out
-  │   │   │   ├── rscape/
-  │   │   │   │   ├── URSxxxxxxxxxx.R2R.cyk.svg
-  │   │   │   │   └── ...
-  │   │   │   ├── URSxxxxxxxxxx.aln
-  │   │   │   ├── URSxxxxxxxxxx.sto
-  │   │   │   ├── URSxxxxxxxxxx.sto.html
-  │   │   │   └── URSxxxxxxxxxx.sto.txt
-  │   └── sorttable.js
-  └── gen_data
-      ├── all_seqs.fasta
-      ├── clean_hits.tsv
-      ├── comp.list
-      ├── groups.tsv
-      ├── home.tsv
-      ├── nhmmer_results/
-      │    ├── nhmmer.out
-      │    ├── nhmmer.sto
-      │    └── nhmmer.tbl
-      └── seqs_keep.tsv
-
-
-.. image::  https://github.com/nataquinones/autoRfam/blob/master/docs/pipeline_diagram.png 
+      autoRfam_URStest/
+      ├── alignments/
+      │   ├── all_alignments/
+      │   │   ├── *.sto
+      │   │   └── ...
+      │   ├── clean_alignments/
+      │   │   ├── *.sto
+      │   │   ├── *.cl.sto
+      │   │   └── ...
+      │   ├── selected_alignments/
+      │   │   ├── URSxxxxxxxxxx/
+      │   │   │   └── URSxxxxxxxxxx.sto
+      │   │   └── ...
+      │   │       └── ...
+      │   └── one.py
+      ├── autoRfamNAV/
+      │   ├── help.html
+      │   ├── HOME.html
+      │   ├── indiv_pages/
+      │   │   ├── rnacode.log
+      │   │   ├── rscape.log
+      │   │   ├── URSxxxxxxxxxx/
+      │   │   │   ├── rnacode/
+      │   │   │   │   ├── (hss-0.eps)
+      │   │   │   │   └── rnacode.out
+      │   │   │   ├── rscape/
+      │   │   │   │   ├── URSxxxxxxxxxx.R2R.cyk.svg
+      │   │   │   │   └── ...
+      │   │   │   ├── URSxxxxxxxxxx.aln
+      │   │   │   ├── URSxxxxxxxxxx.sto
+      │   │   │   ├── URSxxxxxxxxxx.sto.html
+      │   │   │   └── URSxxxxxxxxxx.sto.txt
+      │   │   └── URS.../
+      │   │       └──...
+      │   └── sorttable.js
+      └── gen_data
+          ├── all_seqs.fasta
+          ├── clean_hits.tsv
+          ├── comp.list
+          ├── groups.tsv
+          ├── home.tsv
+          ├── nhmmer_results/
+          │    ├── nhmmer.out
+          │    ├── nhmmer.sto
+          │    └── nhmmer.tbl
+          └── seqs_keep.tsv
