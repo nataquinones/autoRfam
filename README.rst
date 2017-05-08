@@ -52,8 +52,14 @@ Use
 
 Scripts
 -------
-TO_DO
 
++---------------+
+| get_fasta.py_ |
++---------------+
+
+
+
+.. _get_fasta.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/get_fasta.py
 
 
 Pipeline
