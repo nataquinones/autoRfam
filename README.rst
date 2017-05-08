@@ -82,11 +82,11 @@ Individual scripts
 | sto_slicer.py_      | Takes a concatenated ``.sto`` file and slices it into all the individual alignments, names them in   |
 |                     | based on the first sequence of alignment.                                                            |
 |                     +--------+---------------------------------------------------------------------------------------------+
-|                     |**Use:**| ``sto_slicer.py <in> <out_path>``                                                           |
+|                     |**Use:**| ``sto_slicer.py <in> <out_dir>``                                                            |
 |                     +--------+---------------------------------------------------------------------------------------------+
 |                     |        | ``<in>``: Input concatenated ``.sto`` file                                                  |
 |                     |        +---------------------------------------------------------------------------------------------+
-|                     |        | ``<out_path>``: Path where all the sliced ``.sto`` files will be saved                      |
+|                     |        | ``<out_dir>``: Directory where all the sliced ``.sto`` files will be saved                  |
 +---------------------+--------+---------------------------------------------------------------------------------------------+
 | nhmmertbl_parse.py_ | Takes ``nhmmer --tblout``'s output and processes it into ``.tsv`` file to be used for                |
 |                     | ``networkx`` processing. (Removes non significant hits, removes lines of query sequences that        |
@@ -133,19 +133,55 @@ Individual scripts
 |                     |        | *Output:* In the same directory of the input, it makes a directory called                   |
 |                     |        | ``clean_alignments`` with copies of the processed alignments inside.                        |
 +---------------------+--------+---------------------------------------------------------------------------------------------+
-
-
-
-
-+---------------------+
-| pick_reprali.py_    |
-+---------------------+
-| run_rscape.py_      |
-+---------------------+
-| run_rnacode.py_     |
-+---------------------+
-| all_html.py_        |
-+---------------------+
+| pick_reprali.py_    | Takes directory with .sto alignments and a list of connected components (from cluster_ali.py_ ) that |
+|                     | groups them. With this information, it runs esl-alistat on each alignment and selects the best per   |
+|                     | group and makes a new directory with the selected alignments.                                        |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |**Use:**| ``pick_reprali.py <esl-alistat> <comp.list> <in_dir> <out_tsv> <out_dir>``                  |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |        | ``<esl-alistat>``: Path to ``esl-alistat``, from ``easel`` in ``HMMER-3.1b2``               |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<comp.list>``: List of lists in pickle file, from cluster_ali.py_                         |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<in_dir>``:  Directory of directories to process                                          |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<out_tsv>``: Output ``.tsv`` file with alignment stats                                    |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<out_dir>``:  Path where all the selected alignments will be saved                        |
++---------------------+--------+---------------------------------------------------------------------------------------------+
+| run_rscape.py_      | For a directory of directories with ``.sto`` alignments, runs ``R-scape`` and puts the output        |
+|                     | inside each, in a folder called ``rscape\``.                                                         |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |**Use:**| ``run_rscape.py <rscape> <in_dir>``                                                         |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |        | ``<rscape>``: Path to ``R-scape v0.3.3``                                                    |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<in_dir>``: Directory of directories to process                                           |
++---------------------+--------+---------------------------------------------------------------------------------------------+
+| run_rnacode.py_     | For a directory of directories with ``.sto`` alignments, converts alignment into clustal format      |  
+|                     | runs ``RNAcode`` and puts the output inside each, in a folder called ``rnacode\``                    |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |**Use:**| ``run_rscape.py <esl-reformat> <rscape> <in_dir>``                                          |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |        | ``<esl-reformat>``: Path to ``esl-reformat``, from ``easel`` in ``HMMER-3.1b2``             |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<rscape>``: Path to ``RNAcode-0.3``                                                       |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<in_dir>``: Directory of directories to process                                           |
++---------------------+--------+---------------------------------------------------------------------------------------------+
+| all_html.py_        | For a directory of directories with ``.sto`` alignments, ``rscape\`` and ``rnacode\`` results        |
+|                     | it generates a tree of html files as well as a ``HOME.html`` entry point.
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |**Use:**| ``all_html.py <esl-alistat> <in_dir> <home_html> <home_tsv>``                               |
+|                     +--------+---------------------------------------------------------------------------------------------+
+|                     |        | ``<esl-alistat>``: Path to ``esl-alistat``, from ``easel`` in ``HMMER-3.1b2``               |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<in_dir>``: Directory of directories to process                                           |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<home_html>``: Entry point to html pages, (``html`` home)                                 |
+|                     |        +---------------------------------------------------------------------------------------------+
+|                     |        | ``<home_tsv>``: ``.tsv`` file generated from individual pages, used to make html home       |
++---------------------+--------+---------------------------------------------------------------------------------------------+
 
 .. _get_fasta.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/get_fasta.py
 .. _nhmmer_allvsall.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/nhmmer_allvsall.py
