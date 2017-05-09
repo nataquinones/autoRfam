@@ -29,7 +29,7 @@ Use
   cd path/to/
   git clone https://github.com/nataquinones/autoRfam.git
 
-  # 2. Modify data/paths.py with corresponding paths
+  # 2. Modify data/paths.py with appropriate paths
   nhmmerpath = "~/hmmer-3.1b2/binaries/nhmmer"
   eslalistat = "~/hmmer-3.1b2/easel/miniapps/esl-alistat"
   eslref = "~/hmmer-3.1b2/easel/miniapps/esl-reformat"
@@ -48,6 +48,20 @@ Use
 
   # 6. Run
   python /path/to/autoRfam/autoRfam.py /path/to/URS_list.txt 
+
+  # TO RUN IN LSF CLUSTER
+
+  # 1. Get an interactive node
+  bsub -Is $SHELL
+
+  # 2. Update data/luigi.cfg with appropriate information
+
+  # 3. Start central scheduler
+  luigid
+
+  # 4. ssh to the interactive node
+
+  # 5. Run the luigi script
 
 
 Individual scripts
