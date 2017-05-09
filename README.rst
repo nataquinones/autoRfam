@@ -10,14 +10,14 @@ Requirements
 
   - The ``python`` dependencies are specified in `requirements.txt <https://github.com/nataquinones/autoRfam/blob/master/requirements.txt>`_ and can be installed in a virtual environment as previously described.
  
-- From ``HMMER-3.1b2``
+- From ``HMMER-3.1b2`` [`download <http://hmmer.org>`_]
 
   - ``nhmmer``
   - ``esl-alistat`` and ``esl-reformat`` from the Easel library
  
-- ``R-scape v0.3.3``
+- ``R-scape v0.3.3`` [`download <http://eddylab.org/R-scape/>`_]
 
-- ``RNAcode-0.3``
+- ``RNAcode-0.3`` [`download <https://wash.github.io/rnacode/>`_]
 
 
 Use
@@ -207,6 +207,7 @@ OUT:
 .. code::
 
       autoRfam_URStest/
+      │
       ├── alignments/
       │   ├── all_alignments/
       │   │   ├── *.sto
@@ -215,12 +216,12 @@ OUT:
       │   │   ├── *.sto
       │   │   ├── *.cl.sto
       │   │   └── ...
-      │   ├── selected_alignments/
-      │   │   ├── URSxxxxxxxxxx/
-      │   │   │   └── URSxxxxxxxxxx.sto
-      │   │   └── ...
-      │   │       └── ...
-      │   └── one.py
+      │   └── selected_alignments/
+      │       ├── URSxxxxxxxxxx/
+      │       │   └── URSxxxxxxxxxx.sto
+      │       └── ...
+      │           └── ...
+      │   
       ├── autoRfamNAV/
       │   ├── help.html
       │   ├── HOME.html
@@ -241,6 +242,7 @@ OUT:
       │   │   └── URS.../
       │   │       └──...
       │   └── sorttable.js
+      │
       └── gen_data
           ├── all_seqs.fasta
           ├── clean_hits.tsv
