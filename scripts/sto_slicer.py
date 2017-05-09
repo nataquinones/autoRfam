@@ -52,7 +52,7 @@ def slice_sto(stofile, dirpath):
     # Remove last element because it splits into " "
     filelist.pop()
     # Add stockholm file end, //, at the end of each alignment
-    filelist = [s + "\\\\" for s in filelist]
+    filelist = [s + "//" for s in filelist]
 
     # Make 'names' list out of the first sequence of each alignment
     names = []
