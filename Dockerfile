@@ -1,18 +1,14 @@
-# alias es AUTORFAM_VOL=/path/to/autorfam/code
-# volume es ${AUTORFAM_VOL}:/autorfam/autorfam-code
 #
-#	autorfam/ ($RUT)
-#	│
-# 	├── local/ ($LOC)
-#	│   ├── Infernal
-#	│   ├── Python
-#	│   ├── requirements.txt
-#	│   ├── virtualenv
-#	│   └── venv-autorfam
-#	│
-# 	└── autorfam-code/ (**VOL**)
-#		├── requirements.txt
-#	    └── ...
+# Dockerfile to create a reproducible installation of the autoRfam pipeline
+# 
+#
+# About the mounted volume:
+#   /autorfam/autorfam-code is a mounted volume defined in
+#    docker-compose.yml as ${AUTORFAM_VOL}:/autorfam/autorfam-code
+#    or in
+#    docker run -v ${AUTORFAM_VOL}:/autorfam/autorfam-code
+#    where AUTORFAM_VOL=/path/to/autorfam/code
+#
 
 
 FROM centos:6.6
@@ -103,8 +99,8 @@ RUN \
 
 # Create autoRfam virtual environment
 ADD requirements.txt $LOC
-#      Dockerfile reference: ADD <src>... <dest> 
-#      "The <src> path must be inside the context of the build;" !!
+#   Dockerfile reference:
+#   in ADD <src> <dest>, the <src> path must be inside the context of the build" !!
 RUN \
     cd $LOC && \
     $LOC/python-2.7.11/bin/virtualenv venv-autorfam --python=$LOC/python-2.7.11/bin/python && \
@@ -112,10 +108,6 @@ RUN \
     cd $RUT && ls && \
     pip install -r $LOC/requirements.txt
 
-
+# Start up
 ENTRYPOINT \
     bin/bash
-  #source $LOC/venv-autorfam/bin/activate && \
-
-
-

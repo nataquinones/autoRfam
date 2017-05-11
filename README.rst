@@ -63,6 +63,24 @@ Use
 
   # 5. Run the luigi script
 
+  # TO RUN WITH DOCKER
+
+  # TO_DO
+
+  # 1. Clone or download repository
+  cd /path/to/autorfam/code
+  git clone https://github.com/nataquinones/autoRfam.git
+
+  # 2. Run the build
+  export AUTORFAM_VOL=/Users/nquinones/Desktop/autoRfam/
+  cd $AUTORFAM_VOL
+  docker-compose up --build
+
+  # 3. To run interactive session on builded image
+  # (where <autorfam_pipeline> is the <image>)
+  docker run -it -v ${AUTORFAM_VOL}:/autorfam/autorfam-code <autorfam_pipeline>
+
+
 
 Individual scripts
 ------------------
