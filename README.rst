@@ -72,7 +72,7 @@ Use
   git clone https://github.com/nataquinones/autoRfam.git
 
   # 2. Run the build
-  export AUTORFAM_VOL=/Users/nquinones/Desktop/autoRfam/
+  export AUTORFAM_VOL=/path/to/autorfam/code
   cd $AUTORFAM_VOL
   docker-compose up --build
 
