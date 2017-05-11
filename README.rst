@@ -23,6 +23,8 @@ Requirements
 Use
 ---
 
+To run locally
+^^^^^^^^^^^^^^
 .. code:: bash
 
   # 1. Clone or download repository
@@ -49,7 +51,10 @@ Use
   # 6. Run
   python /path/to/autoRfam/autoRfam.py /path/to/URS_list.txt 
 
-  # TO RUN IN LSF CLUSTER
+
+To run in LSF cluster
+^^^^^^^^^^^^^^^^^^^^^
+.. code:: bash
 
   # 1. Get an interactive node
   bsub -Is $SHELL
@@ -63,7 +68,10 @@ Use
 
   # 5. Run the luigi script
 
-  # TO RUN WITH DOCKER
+
+To run with Docker
+^^^^^^^^^^^^^^^^^^
+.. code:: bash
 
   # TO_DO
 
