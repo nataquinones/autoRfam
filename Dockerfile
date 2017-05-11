@@ -19,8 +19,9 @@ FROM centos:6.6
 
 RUN yum install -y \
     curl \
-    gcc \
+    gcc-c++ \
     git \
+    gnuplot \
     libaio \
     openssl \
     openssl-devel \
@@ -62,19 +63,43 @@ RUN \
     rm -Rf virtualenv-15.0.0
 
 
-# Install Infernal
+# Install HMMER and Easel
 RUN \
     cd $LOC && \
-    curl -OL http://eddylab.org/infernal/infernal-1.1.1.tar.gz && \
-    tar -xvzf infernal-1.1.1.tar.gz && \
-    cd infernal-1.1.1 && \
-    ./configure --prefix=$LOC/infernal-1.1.1 && \
+    curl -OL http://eddylab.org/software/hmmer3/3.1b2/hmmer-3.1b2.tar.gz && \
+    tar zxf hmmer-3.1b2.tar.gz && \
+    cd hmmer-3.1b2 && \
+    ./configure --prefix=$LOC/hmmer-3.1b2 && \
     make && \
     make install && \
     cd easel && \
     make install && \
     cd $LOC && \
-    rm infernal-1.1.1.tar.gz
+    rm hmmer-3.1b2.tar.gz
+
+# Install Rscape
+RUN \
+    cd $LOC && \
+    curl -OL http://eddylab.org/software/rscape/rscape_v0.3.3.tar.gz && \
+    tar zxf rscape_v0.3.3.tar.gz && \
+    cd rscape_v0.3.3 && \
+    ./configure --prefix=$LOC/rscape_v0.3.3 && \
+    make && \
+    make install && \
+    cd $LOC && \
+    rm rscape_v0.3.3.tar.gz
+
+# Install RNAcode
+RUN \
+    cd $LOC && \
+    curl -OL http://github.com/downloads/wash/rnacode/RNAcode-0.3.tar.gz && \
+    tar zxf RNAcode-0.3.tar.gz && \
+    cd RNAcode-0.3 && \
+    ./configure --prefix=$LOC/RNAcode-0.3 && \
+    make && \
+    make install && \
+    cd $LOC && \
+    rm RNAcode-0.3.tar.gz
 
 # Create autoRfam virtual environment
 ADD requirements.txt $LOC
@@ -87,8 +112,6 @@ RUN \
     cd $RUT && ls && \
     pip install -r $LOC/requirements.txt
 
-
-#CMD $LOC/python -h
 
 ENTRYPOINT \
     bin/bash
