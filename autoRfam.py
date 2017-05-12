@@ -13,7 +13,7 @@ from scripts import pick_repali
 from scripts import run_rscape
 from scripts import run_rnacode
 from scripts import all_html
-import data
+import templates
 from data import paths
 
 NHMMERPATH = paths.nhmmerpath
@@ -21,9 +21,9 @@ ESLALISTAT = paths.eslalistat
 ESLREF_PATH = paths.eslref
 RSCAPEPATH = paths.rscapepath
 RNACODE_PATH = paths.rnacodepath
-DATA_PATH = os.path.dirname(os.path.abspath(data.__file__))
+DATA_PATH = os.path.dirname(os.path.abspath(templates.__file__))
 
-INPUT_URS = sys.argv[1]
+INPUT_URS = sys.argv[1]  # in main
 INPUT_ABS = os.path.abspath(INPUT_URS)
 NAME = os.path.splitext(os.path.basename(INPUT_ABS))[0]
 DESTDIR = os.path.join(os.path.dirname(INPUT_ABS), "autoRfam_%s" % NAME)
@@ -107,7 +107,6 @@ class MarkToClean(luigi.Task):
 
     def run(self):
         marktoclean.main(self.input().path, self._out)
-
 
 class ClusterAli(luigi.Task):
     """
@@ -203,9 +202,9 @@ class AllHtml(luigi.Task):
     def run(self):
         all_html.main(ESLALISTAT, self.input()["selali"].path, self._homepath, self._hometsv)
         os.symlink(self._homepath, os.path.join(DESTDIR, "HOME.html"))
-        html_data = os.path.join(DATA_PATH, "html")
-        for file in os.listdir(html_data):
-            shutil.copy(os.path.join(html_data, file), os.path.join(NAVDIR, file))
+        for file in os.listdir(DATA_PATH):
+            if not file.startswith('__init__'):
+                shutil.copy(os.path.join(DATA_PATH, file), os.path.join(NAVDIR, file))
 
 
 if __name__ == '__main__':
