@@ -23,6 +23,8 @@ Requirements
 Use
 ---
 
+To run locally
+^^^^^^^^^^^^^^
 .. code:: bash
 
   # 1. Clone or download repository
@@ -49,7 +51,10 @@ Use
   # 6. Run
   python /path/to/autoRfam/autoRfam.py /path/to/URS_list.txt 
 
-  # TO RUN IN LSF CLUSTER
+
+To run in LSF cluster
+^^^^^^^^^^^^^^^^^^^^^
+.. code:: bash
 
   # 1. Get an interactive node
   bsub -Is $SHELL
@@ -62,6 +67,27 @@ Use
   # 4. ssh to the interactive node
 
   # 5. Run the luigi script
+
+
+To run with Docker
+^^^^^^^^^^^^^^^^^^
+.. code:: bash
+
+  # TO_DO
+
+  # 1. Clone or download repository
+  cd /path/to/autorfam/code
+  git clone https://github.com/nataquinones/autoRfam.git
+
+  # 2. Run the build
+  export AUTORFAM_VOL=/path/to/autorfam/code
+  cd $AUTORFAM_VOL
+  docker-compose up --build
+
+  # 3. To run interactive session on builded image
+  # (where <autorfam_pipeline> is the <image>)
+  docker run -it -v ${AUTORFAM_VOL}:/autorfam/autorfam-code <autorfam_pipeline>
+
 
 
 Individual scripts

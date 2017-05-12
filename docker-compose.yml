@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  pipeline:
+    build: .
+    volumes:
+      - ${AUTORFAM_VOL}:/autorfam/autorfam-code
