@@ -1,0 +1,5 @@
+nhmmerpath = "~/bin/nhmmer"
+eslalistat = "~/bin/esl-alistat"
+eslref = "~/bin/esl-reformat"
+rscapepath = "~/bin/R-scape"
+rnacodepath = "~/bin/RNAcode"
