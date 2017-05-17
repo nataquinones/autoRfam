@@ -90,6 +90,10 @@ To run with Docker
   # 3. To run interactive session on builded image
   # (where <autorfam_pipeline> is the <image>)
   docker run -it -v ${AUTORFAM_VOL}:/autorfam/autorfam-code <autorfam_pipeline>
+  source /autorfam/local/venv-autorfam/bin/activate
+  /autorfam/autorfam-code/autoRfam.py -e docker <URS_list.txt>
+  # for help
+  /autorfam/autorfam-code/autoRfam.py -h
 
 
 
