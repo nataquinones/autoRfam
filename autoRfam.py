@@ -1,7 +1,9 @@
+import argparse
 import luigi
 import os
 import shutil
 import sys
+
 from scripts import get_fasta
 from scripts import nhmmer_allvsall
 from scripts import sto_slicer
@@ -14,19 +16,188 @@ from scripts import run_rscape
 from scripts import run_rnacode
 from scripts import all_html
 import templates
-from data import paths
 
-NHMMERPATH = paths.nhmmerpath
-ESLALISTAT = paths.eslalistat
-ESLREF_PATH = paths.eslref
-RSCAPEPATH = paths.rscapepath
-RNACODE_PATH = paths.rnacodepath
+
+# Argument parser
+parser = argparse.ArgumentParser()
+parser.add_argument("input_urs",
+                    metavar='<ursfile>',
+                    help="")
+parser.add_argument("-e", "--env",
+                    metavar='<s>',
+                    help="""<s> can be <local>, <docker> or <lsf>. \
+                          Select to import paths from appropriate \
+                          file in config/. Default setting is <local>.""",
+                    type=str,
+                    default="local")
+parser.add_argument("-o", "--outdir",
+                    metavar='<dir>',
+                    help="""<dir> is the path to the directory which will be created
+                            in which the whole pipeline output will be saved. \
+                            If argument not specified, it will create it in the
+                            /path/to/<ursfile>/autoRfam_<ursfile>""",
+                    default="default_dir",
+                    type=str)
+
+args = parser.parse_args()
+
+
+# Conditional import of config/paths_*.py file
+if args.env == "local":
+    from config import paths_local as paths
+elif args.env == "docker":
+    from config import paths_docker as paths
+elif args.env == "lsf":
+    from config import paths_lsf as paths
+else:
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# autoRfam"
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# Invalid -e: Please select a valid option."
+    print "# Must be: local, docker or lsf."
+    print "#"
+    print "# For help: autoRfam.py -h"
+    print "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    sys.exit(1)
+
+
+# Import and check config paths
+
+# NHMMER
+if os.path.exists(paths.nhmmerpath) & (os.path.basename(paths.nhmmerpath) == "nhmmer"):
+    NHMMERPATH = paths.nhmmerpath
+else:
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# autoRfam"
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# Can't find: nhmmer"
+    print "# I'm looking for '%s' as indicated in '%s'" % (paths.nhmmerpath, paths.__file__)
+    if (os.path.basename(paths.nhmmerpath) != "nhmmer"):
+        print "# The basename is '%s', but I expect it to be 'nhmmer'." % os.path.basename(paths.nhmmerpath)
+    else:
+        print "# Try selecting the correct -e option or ammending this config file."
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    sys.exit(1)
+
+# ESLALISTAT
+if os.path.exists(paths.eslalistat) & (os.path.basename(paths.eslalistat) == "esl-alistat"):
+    ESLALISTAT = paths.eslalistat
+else:
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# autoRfam"
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# Can't find: esl-alistat"
+    print "# I'm looking for '%s' as indicated in '%s'" % (paths.eslalistat, paths.__file__)
+    if (os.path.basename(paths.eslalistat) != "esl-alistat"):
+        print "# The basename is '%s', but I expect it to be 'esl-alistat'." % os.path.basename(paths.eslalistat)
+    else:
+        print "# Try selecting the correct -e option or ammending this config file."
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    sys.exit(1)
+
+# ESLREF_PATH
+if os.path.exists(paths.eslref) & (os.path.basename(paths.eslref) == "esl-reformat"):
+    ESLREF_PATH = paths.eslref
+else:
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# autoRfam"
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# Can't find: esl-reformat"
+    print "# I'm looking for '%s' as indicated in '%s'" % (paths.eslref, paths.__file__)
+    if (os.path.basename(paths.eslref) != "esl-reformat"):
+        print "# The basename is '%s', but I expect it to be 'esl-reformat'." % os.path.basename(paths.eslref)
+    else:
+        print "# Try selecting the correct -e option or ammending this config file."
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    sys.exit(1)
+
+# RSCAPEPATH
+if os.path.exists(paths.rscapepath) & (os.path.basename(paths.rscapepath) == "R-scape"):
+    RSCAPEPATH = paths.rscapepath
+else:
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# autoRfam"
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# Can't find: R-scape"
+    print "# I'm looking for '%s' as indicated in '%s'" % (paths.rscapepath, paths.__file__)
+    if (os.path.basename(paths.rscapepath) != "R-scape"):
+        print "# The basename is '%s', but I expect it to be 'R-scape'." % os.path.basename(paths.rscapepath)
+    else:
+        print "# Try selecting the correct -e option or ammending this config file."
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    sys.exit(1)
+
+# RNAcode
+if os.path.exists(paths.rnacodepath) & (os.path.basename(paths.rnacodepath) == "RNAcode"):
+    RNACODE_PATH = paths.rnacodepath
+else:
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# autoRfam"
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    print "# Can't find: RNAcode"
+    print "# I'm looking for '%s' as indicated in '%s'" % (paths.rnacodepath, paths.__file__)
+    if (os.path.basename(paths.rnacodepath) != "RNAcode"):
+        print "# The basename is '%s', but I expect it to be 'RNAcode'." % os.path.basename(paths.rnacodepath)
+    else:
+        print "# Try selecting the correct -e option or ammending this config file."
+    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+    sys.exit(1)
+
 DATA_PATH = os.path.dirname(os.path.abspath(templates.__file__))
 
-INPUT_URS = sys.argv[1]  # in main
+# read input
+INPUT_URS = args.input_urs
 INPUT_ABS = os.path.abspath(INPUT_URS)
-NAME = os.path.splitext(os.path.basename(INPUT_ABS))[0]
-DESTDIR = os.path.join(os.path.dirname(INPUT_ABS), "autoRfam_%s" % NAME)
+
+if args.outdir == "default_dir":
+    NAME = os.path.splitext(os.path.basename(INPUT_ABS))[0]
+    DESTDIR = os.path.join(os.path.dirname(INPUT_ABS), "autoRfam_%s" % NAME)
+else:
+    if os.path.exists(os.path.abspath(args.outdir)):
+        if os.path.isfile(os.path.abspath(args.outdir)):
+            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+            print "# autoRfam"
+            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+            print "# Invalid -o: Please select a valid path."
+            print "# Problem:"
+            print "# '%s'" % os.path.abspath(args.outdir)
+            print "# is not a directory."
+            print "#"
+            print "# For help: autoRfam.py -h"
+            print "- - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+            sys.exit(1)
+
+        else:
+            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+            print "# autoRfam"
+            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+            print "# Invalid -o: Please select a valid path."
+            print "# Problem:"
+            print "# '%s'" % os.path.abspath(args.outdir)
+            print "# already exists."
+            print "# It needs to be a new directory."
+            print "#"
+            print "# For help: autoRfam.py -h"
+            print "- - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+            sys.exit(1)
+
+    else:
+        absdir_path = os.path.abspath(os.path.dirname(args.outdir))
+        if os.path.exists(absdir_path):
+            DESTDIR = os.path.abspath(args.outdir)
+        else:
+            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+            print "# autoRfam"
+            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+            print "# Invalid -o: Please select a valid path."
+            print "# Problem:"
+            print "# Can't create '%s', because" % args.outdir
+            print "# '%s' doesn't exist." % absdir_path
+            print "#"
+            print "# For help: autoRfam.py -h"
+            print "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+            sys.exit(1)
+
 ALIDIR = os.path.join(DESTDIR, "alignments")
 DATADIR = os.path.join(DESTDIR, "gen_data")
 NAVDIR = os.path.join(DESTDIR, "autoRfamNAV")

@@ -31,12 +31,12 @@ To run locally
   cd path/to/
   git clone https://github.com/nataquinones/autoRfam.git
 
-  # 2. Modify data/paths.py with appropriate paths
-  nhmmerpath = "~/hmmer-3.1b2/binaries/nhmmer"
-  eslalistat = "~/hmmer-3.1b2/easel/miniapps/esl-alistat"
-  eslref = "~/hmmer-3.1b2/easel/miniapps/esl-reformat"
-  rscapepath = "~/rscape_v0.3.3/bin/R-scape"
-  rnacodepath = "~/RNAcode-0.3/src/RNAcode"
+  # 2. Modify config/paths_local.py with appropriate paths
+  nhmmerpath = "local/path/to/nhmmer"
+  eslalistat = "local/path/to/esl-alistat"
+  eslref = "local/path/to/esl-reformat"
+  rscapepath = "local/path/to/R-scape"
+  rnacodepath = "local/path/to/RNAcode"
 
   # 3. Create a new virtual environment
   virtualenv /path/to/new/autorfam-venv/
@@ -49,7 +49,10 @@ To run locally
   pip install -r requirements.txt
 
   # 6. Run
-  python /path/to/autoRfam/autoRfam.py /path/to/URS_list.txt 
+  python /path/to/autoRfam/autoRfam.py /path/to/URS_list.txt
+
+  # For options check:
+  pyhton /path/to/autoRfam/autoRfam.py -h
 
 
 To run in LSF cluster
@@ -59,7 +62,7 @@ To run in LSF cluster
   # 1. Get an interactive node
   bsub -Is $SHELL
 
-  # 2. Update data/luigi.cfg with appropriate information
+  # 2. Update config/luigi.cfg with appropriate information
 
   # 3. Start central scheduler
   luigid
