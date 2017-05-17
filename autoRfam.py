@@ -372,7 +372,6 @@ class AllHtml(luigi.Task):
 
     def run(self):
         all_html.main(ESLALISTAT, self.input()["selali"].path, self._homepath, self._hometsv)
-        os.symlink(self._homepath, os.path.join(DESTDIR, "HOME.html"))
         for file in os.listdir(DATA_PATH):
             if not file.startswith('__init__'):
                 shutil.copy(os.path.join(DATA_PATH, file), os.path.join(NAVDIR, file))
