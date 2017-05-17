@@ -248,7 +248,7 @@ def check_rscape(stoali):
     return rscapewarn
 
 
-def make_html(eslalistat, stoali, homehtml):
+def make_html(eslalistat, stoali):
     """
     """
 
@@ -298,25 +298,26 @@ def make_html(eslalistat, stoali, homehtml):
                       "<a href=\"%s\">"\
                       "<i>[Explore RNAcode results]</i>"\
                       "</a>"\
-                      "</font>\n" % (os.path.join(os.path.dirname(stoali), RNACODE_FOLDER))
+                      "</font>\n" % (os.path.join(".", RNACODE_FOLDER))
     else:
         rnacode_html = "No coding potential found. "\
                       "<font size='2' color='grey'>"\
                       "<a href=\"%s\"><i>"\
                       "[Explore RNAcode results]</i>"\
                       "</a>"\
-                      "</font>\n" % (os.path.join(os.path.dirname(stoali), RNACODE_FOLDER))
+                      "</font>\n" % (os.path.join(".", RNACODE_FOLDER))
     # ....Rscape
     rscape_img = os.path.join(os.path.join(os.path.dirname(stoali), RSCAPE_FOLDER), "*.cyk.R2R.sto.svg")
+    img_src = glob.glob(rscape_img)[0]
 
     if len(glob.glob(rscape_img)) != 0:
-        rscape_html = "<img src=%s>" % glob.glob(rscape_img)[0]
+        rscape_html = "<img src=%s>" % os.path.join(".", RSCAPE_FOLDER, os.path.basename(img_src))
 
     else:
         rscape_html = "R-scape image not available"
 
     # .. OTHER HTML
-    browse_ali = str(homehtml)
+    browse_ali = "../../HOME.html"
     header = """
              <html>
                    <head>
@@ -430,7 +431,7 @@ def make_html(eslalistat, stoali, homehtml):
         f.write("<h2>Full information</h2> \n")
         f.write("<hr />\n")
         f.write("<font size='2' color='grey'>")
-        f.write("    <i><a href=\"file:%s.txt\">[Explore alignment file]</a></i>\n" %stoali)
+        f.write("    <i><a href=\"file:%s.txt\">[Explore alignment file]</a></i>\n" % os.path.basename(stoali))
         f.write("</font>")
         f.write("<br>\n")
         f.write("<br>\n")
@@ -483,7 +484,7 @@ def write_homeinfo(infoline, out_tsv):
         f.close()
 
 
-def iterdir(eslalistat, hometsv, dir_path, homehtml):
+def iterdir(eslalistat, hometsv, dir_path):
     """
     Makes iteration of main function in a directory containing
     directories with an alignment inside.
@@ -493,11 +494,11 @@ def iterdir(eslalistat, hometsv, dir_path, homehtml):
 
         for filesto in alignments:
             shutil.copy(filesto, filesto + ".txt")
-            infoline = make_html(eslalistat, filesto, homehtml)
+            infoline = make_html(eslalistat, filesto)
             write_homeinfo(infoline, hometsv)
 
 
-def home_table(dirpath, hometsv):
+def home_table(hometsv):
     browse_df = pd.read_csv(hometsv,
                             sep="\t",
                             header=None)
@@ -520,7 +521,7 @@ def home_table(dirpath, hometsv):
     browse_df["name"] = browse_df["name"].str.replace(r"\[subseq from\]", "")
     browse_df["path"] = browse_df["file"].str.replace(r".cl.sto", "").astype(str)
     browse_df["path"] = browse_df["path"].str.replace(r".sto", "").astype(str)
-    browse_df["path"] = dirpath + "/" + browse_df["path"] + "/" + browse_df["file"].astype(str) + ".html"
+    browse_df["path"] = "./indiv_pages/" + browse_df["path"] + "/" + browse_df["file"].astype(str) + ".html"
 
     browse_df["file"] = "<a href=\"" + browse_df["path"] + "\">" + browse_df["file"] + "</a>"
     del browse_df["path"]
@@ -539,10 +540,10 @@ def home_table(dirpath, hometsv):
     return browse_df
 
 
-def home_html(dirpath, homehtml, hometsv):
+def home_html(homehtml, hometsv):
     """
     """
-    browse_df = home_table(dirpath, hometsv)
+    browse_df = home_table(hometsv)
     browse_html = browse_df.to_html(header=True,
                                     index=False,
                                     escape=False,
@@ -630,8 +631,8 @@ def home_html(dirpath, homehtml, hometsv):
 def main(eslalistat, dirpath, homehtml, hometsv):
     """
     """
-    iterdir(eslalistat, hometsv, dirpath, homehtml)
-    home_html(dirpath, homehtml, hometsv)
+    iterdir(eslalistat, hometsv, dirpath)
+    home_html(homehtml, hometsv)
 
 # .........................................................................
 
