@@ -183,6 +183,14 @@ def request_xrefs(urs):
     return df_xrefs
 
 
+def dominant_type(df_xrefs):
+    """
+    """
+    dominant = df_xrefs["rna_type"].value_counts().index[0]
+
+    return dominant
+
+
 def database_table(df_xrefs):
     """
     """
@@ -282,12 +290,14 @@ def make_html(eslalistat, stoali):
                                       index=True,
                                       escape=False,
                                       classes='df')
+
     # ..... full information
     fullinfo_df = fullinfo_table(df_desc, df_xrefs)
     fullinfo_html = fullinfo_df.to_html(header=True,
                                         index=False,
                                         escape=False,
                                         classes='sortable')
+
 
     # .. RSCAPE & RNACODE
     # .....RNAcode
@@ -448,6 +458,7 @@ def make_html(eslalistat, stoali):
     f_avid = df_easelstats[0][5]
     f_numpub = len(df_publications)
     f_numdb = len(database_df)
+    f_type = str(dominant_type(df_xrefs))
 
     if check_rnacode(stoali):
         f_codingwarn = "Yes"
@@ -461,7 +472,7 @@ def make_html(eslalistat, stoali):
     else:
         f_rscape = "No"
 
-    infoline = "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (f_file,
+    infoline = "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (f_file,
                                                                  f_name,
                                                                  f_numseq,
                                                                  f_alen,
@@ -471,7 +482,8 @@ def make_html(eslalistat, stoali):
                                                                  f_numpub,
                                                                  f_numdb,
                                                                  f_codingwarn,
-                                                                 f_rscape)
+                                                                 f_rscape,
+                                                                 f_type)
 
     return infoline
 
@@ -512,7 +524,8 @@ def home_table(hometsv):
                           "num_pub",
                           "num_db",
                           "codingwarn",
-                          "rscapewarn"]]
+                          "rscapewarn",
+                          "dominant_type"]]
     browse_df["num_seq"] = browse_df["num_seq"].astype(int)
     browse_df["alen"] = browse_df["alen"].astype(int)
     browse_df["avlen"] = browse_df["avlen"].astype(int)
@@ -535,7 +548,8 @@ def home_table(hometsv):
                           "Number of<br>publications",
                           "Number of<br>databases",
                           "RNAcode<br>warning",
-                          "R-scape<br>sig."]
+                          "R-scape<br>sig.",
+                          "Dominant<br>rna_type"]
 
     return browse_df
 
