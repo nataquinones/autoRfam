@@ -142,7 +142,3 @@ Individual scripts
 .. _run_rscape.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/run_rscape.py
 .. _run_rnacode.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/run_rnacode.py
 .. _all_html.py: https://github.com/nataquinones/autoRfam/blob/master/scripts/all_html.py
-
-Luigi pipeline
---------------
-.. image::  https://github.com/nataquinones/autoRfam/blob/master/docs/pipeline_diagram.png 
