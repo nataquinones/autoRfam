@@ -4,12 +4,12 @@ Description
 -----------
 **autoRfam** is a pipeline that allows to cluster RNAcentral sequences into potential new families. It starts with a list of RNAcentral URSs, aligns them, selects the most relevant alignments, recollects important information about them (alignment statistics, annotations, publications, secondary structure prediction, coding potential, etc.) and makes this information browsable through ``html`` pages.
 
-+--------+-------------------------------------------------+-----------------------+
-|**IN**  | List of RNAcentral URSs                         |see: URStest1.txt_     |
-+--------+-------------------------------------------------+-----------------------+
-|**OUT** | Directory with results, browsable through the   | see: Detailed output  |
-|        | generated file ``/autoRfamNAV/HOME.html``       | directory structure   |
-+--------+-------------------------------------------------+-----------------------+
++--------+-------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------+
+|**IN**  | List of RNAcentral URSs                         |see: URStest1.txt_                                                                                                           |
++--------+-------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------+
+|**OUT** | Directory with results, browsable through the   | see: `Detailed output directory structure <https://github.com/nataquinones/autoRfam#detailed-output-directory-structure>`_  |
+|        | generated file ``/autoRfamNAV/HOME.html``       |                                                                                                                             |
++--------+-------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------+
 
 .. _URStest1.txt: https://github.com/nataquinones/autoRfam/blob/master/files/URStest1.txt
 .. _URStest2.txt: https://github.com/nataquinones/autoRfam/blob/master/files/URStest2.txt
