@@ -74,7 +74,7 @@ To run with Docker
   source $LOC/venv-autorfam/bin/activate
   cd /autorfam/autorfam-code
   # example run
-  python autoRfam.py -e docker ./files/URStest2.txt
+  python autoRfam.py -e local ./files/URStest2.txt
   # browse results from: /files/autoRfam_URStest2/autoRfamNAV/HOME.html
   
   # for options
