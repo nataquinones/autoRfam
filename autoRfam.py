@@ -80,6 +80,7 @@ def import_config(args):
 
 class SetUp(luigi.Task):
     """
+    Task to set up paths and directory structure
     """
     arguments = main_argparser()
     out_dir = setup_check.check_outdir(arguments)
@@ -105,6 +106,7 @@ class SetUp(luigi.Task):
 
 class GetFasta(luigi.Task):
     """
+    Task running get_fasta.fasta_seq()
     """
     _in = SetUp.arguments.input_urs
     _out = os.path.join(SetUp.data_dir,
@@ -122,6 +124,7 @@ class GetFasta(luigi.Task):
 
 class NhmmerAll(luigi.Task):
     """
+    Task running nhmmer_allvsall.main()
     """
     outdir = SetUp.nhmmer_dir
     outname = "nhmmer"
@@ -146,6 +149,7 @@ class NhmmerAll(luigi.Task):
 
 class StoSlice(luigi.Task):
     """
+    Task running sto_slicer.slice_sto()
     """
     outdir = SetUp.allali_dir
 
@@ -162,6 +166,7 @@ class StoSlice(luigi.Task):
 
 class NhmmerTblParse(luigi.Task):
     """
+    Task running nhmmertbl_parse.clean_selfhits()
     """
     _out = os.path.join(SetUp.data_dir,
                         "clean_hits.tsv")
@@ -179,6 +184,7 @@ class NhmmerTblParse(luigi.Task):
 
 class MarkToClean(luigi.Task):
     """
+    Task running marktoclean.main()
     """
     _out = os.path.join(SetUp.data_dir,
                         "seqs_keep.tsv")
@@ -196,6 +202,7 @@ class MarkToClean(luigi.Task):
 
 class ClusterAli(luigi.Task):
     """
+    Task running cluster_ali.main()
     """
     _out = os.path.join(SetUp.data_dir,
                         "comp.list")
@@ -213,6 +220,7 @@ class ClusterAli(luigi.Task):
 
 class CleanAli(luigi.Task):
     """
+    Task running clean_ali.main()
     """
     _out = SetUp.cleanali_dir
 
@@ -231,6 +239,8 @@ class CleanAli(luigi.Task):
 
 class PickRepAli(luigi.Task):
     """
+    Task running pick_repali.main()
+    also making copy of directory in new location.
     """
     _tsvout = os.path.join(SetUp.data_dir, "groups.tsv")
     outdir = SetUp.selali_dir
@@ -255,6 +265,7 @@ class PickRepAli(luigi.Task):
 
 class RunRscape(luigi.Task):
     """
+    Task running run_rscape.iterdir()
     """
     _out = os.path.join(PickRepAli.outdir2,
                         "rscape.log")
@@ -272,6 +283,7 @@ class RunRscape(luigi.Task):
 
 class RunRNAcode(luigi.Task):
     """
+    Task running run_rnacode.iterdir()
     """
     _out = os.path.join(PickRepAli.outdir2,
                         "rnacode.log")
@@ -290,6 +302,7 @@ class RunRNAcode(luigi.Task):
 
 class AllHtml(luigi.Task):
     """
+    Task running all_html.main()
     """
     _homepath = os.path.join(SetUp.nav_dir,
                              "HOME.html")
