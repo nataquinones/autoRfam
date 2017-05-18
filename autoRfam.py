@@ -1,9 +1,10 @@
+# ........................IMPORT GENERAL MODULES..............................
 import argparse
 import luigi
 import os
 import shutil
 import sys
-
+# ........................IMPORT PROJECT MODULES..............................
 from scripts import get_fasta
 from scripts import nhmmer_allvsall
 from scripts import sto_slicer
@@ -17,8 +18,9 @@ from scripts import run_rnacode
 from scripts import all_html
 import templates
 
+# ......................SETUP AND ARGUMENT PARSER............................
 
-# Argument parser
+# .......... main argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument("input_urs",
                     metavar='<ursfile>',
@@ -42,7 +44,7 @@ parser.add_argument("-o", "--outdir",
 args = parser.parse_args()
 
 
-# Conditional import of config/paths_*.py file
+# .......... conditional import of config/paths_*.py file
 if args.env == "local":
     from config import paths_local as paths
 elif args.env == "docker":
@@ -61,9 +63,8 @@ else:
     sys.exit(1)
 
 
-# Import and check config paths
-
-# NHMMER
+# .......... import and check of config paths
+# nhmmer
 if os.path.exists(paths.nhmmerpath) & (os.path.basename(paths.nhmmerpath) == "nhmmer"):
     NHMMERPATH = paths.nhmmerpath
 else:
@@ -79,7 +80,7 @@ else:
     print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
     sys.exit(1)
 
-# ESLALISTAT
+# esl-alistat
 if os.path.exists(paths.eslalistat) & (os.path.basename(paths.eslalistat) == "esl-alistat"):
     ESLALISTAT = paths.eslalistat
 else:
@@ -95,7 +96,7 @@ else:
     print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
     sys.exit(1)
 
-# ESLREF_PATH
+# esl-reformat
 if os.path.exists(paths.eslref) & (os.path.basename(paths.eslref) == "esl-reformat"):
     ESLREF_PATH = paths.eslref
 else:
@@ -111,7 +112,7 @@ else:
     print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
     sys.exit(1)
 
-# RSCAPEPATH
+# r-scape
 if os.path.exists(paths.rscapepath) & (os.path.basename(paths.rscapepath) == "R-scape"):
     RSCAPEPATH = paths.rscapepath
 else:
@@ -145,10 +146,12 @@ else:
 
 DATA_PATH = os.path.dirname(os.path.abspath(templates.__file__))
 
+# .......... setup path variables
 # read input
 INPUT_URS = args.input_urs
 INPUT_ABS = os.path.abspath(INPUT_URS)
 
+# check if output path is valid
 if args.outdir == "default_dir":
     NAME = os.path.splitext(os.path.basename(INPUT_ABS))[0]
     DESTDIR = os.path.join(os.path.dirname(INPUT_ABS), "autoRfam_%s" % NAME)
@@ -198,11 +201,12 @@ else:
             print "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
             sys.exit(1)
 
+# define global paths
 ALIDIR = os.path.join(DESTDIR, "alignments")
 DATADIR = os.path.join(DESTDIR, "gen_data")
 NAVDIR = os.path.join(DESTDIR, "autoRfamNAV")
 
-
+# ...........................LUIGI PIPELINE.................................
 class GetFasta(luigi.Task):
     """
     """
