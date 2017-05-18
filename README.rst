@@ -75,7 +75,8 @@ To run with Docker
   cd /autorfam/autorfam-code
   # example run
   python autoRfam.py -e docker ./files/URStest2.txt
-  # Browse results from: /files/autoRfam_URStest2/autoRfamNAV/HOME.html
+  # browse results from: /files/autoRfam_URStest2/autoRfamNAV/HOME.html
+  
   # for options
   python autoRfam.py -h
 
@@ -107,7 +108,10 @@ To run locally
 
   # 6. Run
   cd /path/to/autorfam/code/autoRfam/
-  python autoRfam.py -e local <URS_list.txt>
+  # example run
+  python autoRfam.py -e docker ./files/URStest2.txt
+  # browse results from: /files/autoRfam_URStest2/autoRfamNAV/HOME.html
+  
   # for options
   python autoRfam.py -h
 
