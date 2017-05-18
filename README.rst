@@ -15,6 +15,26 @@ Description
 .. _URStest2.txt: https://github.com/nataquinones/autoRfam/blob/master/files/URStest2.txt
 
 
+The **main script** is ``autoRfam.py``, which launches a `Luigi <http://luigi.readthedocs.io/en/stable/index.html>`_ pipeline (see: `Luigi Pipeline <https://github.com/nataquinones/autoRfam#luigi-pipeline>`_). Usage:
+
+.. code::
+
+  autoRfam.py [-h] [-e <s>] [-o <dir>] <ursfile>
+  
+  positional arguments:
+    <ursfile>             File with RNAcentral URSs
+  
+  optional arguments:
+    -h, --help            show this help message and exit
+    -e <s>, --env <s>     <s> can be <local>, <docker> or <lsf>. Select to
+                          import paths from appropriate file in config/. Default
+                          setting is <local>.
+    -o <dir>, --outdir <dir>
+                          <dir> is the path to the directory which will be
+                          created in which the whole pipeline output will be
+                          saved. If argument not specified, it will create it in
+                          the /path/to/<ursfile>/autoRfam_<ursfile>
+
 Requirements
 ------------
 - ``python 2.7.9``
@@ -165,3 +185,7 @@ OUT:
           │    ├── nhmmer.sto
           │    └── nhmmer.tbl
           └── seqs_keep.tsv
+
+Luigi Pipeline
+--------------
+.. image::  https://github.com/nataquinones/autoRfam/blob/master/docs/pipeline_diagram.png 
