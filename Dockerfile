@@ -108,6 +108,7 @@ RUN \
     cd $RUT && ls && \
     pip install -r $LOC/requirements.txt
 
+
 # Start up
 ENTRYPOINT \
     bin/bash

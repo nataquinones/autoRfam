@@ -22,13 +22,38 @@ Requirements
 
 Use
 ---
+To run with Docker
+^^^^^^^^^^^^^^^^^^
+.. code:: bash
+
+
+  # 1. Clone or download repository
+  cd /path/to/autorfam/code
+  git clone https://github.com/nataquinones/autoRfam.git
+
+  # 2. Run the build
+  export AUTORFAM_VOL=/path/to/autorfam/code/autoRfam
+  cd $AUTORFAM_VOL
+  docker-compose build
+
+  # 3. Enter the container
+  docker-compose run pipeline
+
+  # 4. Once inside the container, to run autoRfam:
+  source $LOC/venv-autorfam/bin/activate
+  cd /autorfam/autorfam-code
+  # example run
+  python autoRfam.py -e docker ./files/URStest2.txt
+  # for options
+  python autoRfam.py -h
+
 
 To run locally
 ^^^^^^^^^^^^^^
 .. code:: bash
 
   # 1. Clone or download repository
-  cd path/to/
+  cd /path/to/autorfam/code
   git clone https://github.com/nataquinones/autoRfam.git
 
   # 2. Modify config/paths_local.py with appropriate paths
@@ -45,14 +70,14 @@ To run locally
   source /path/to/new/autorfam-venv/bin/activate
 
   # 5. Install python dependencies
-  cd /path/to/autoRfam/
+  cd /path/to/autorfam/code/autoRfam/
   pip install -r requirements.txt
 
   # 6. Run
-  python /path/to/autoRfam/autoRfam.py /path/to/URS_list.txt
-
-  # For options check:
-  pyhton /path/to/autoRfam/autoRfam.py -h
+  cd /path/to/autorfam/code/autoRfam/
+  python autoRfam.py -e local <URS_list.txt>
+  # for options
+  python autoRfam.py -h
 
 
 To run in LSF cluster
@@ -69,31 +94,7 @@ To run in LSF cluster
 
   # 4. ssh to the interactive node
 
-  # 5. Run the luigi script
-
-
-To run with Docker
-^^^^^^^^^^^^^^^^^^
-.. code:: bash
-
-  # TO_DO
-
-  # 1. Clone or download repository
-  cd /path/to/autorfam/code
-  git clone https://github.com/nataquinones/autoRfam.git
-
-  # 2. Run the build
-  export AUTORFAM_VOL=/path/to/autorfam/code
-  cd $AUTORFAM_VOL
-  docker-compose up --build
-
-  # 3. To run interactive session on builded image
-  # (where <autorfam_pipeline> is the <image>)
-  docker run -it -v ${AUTORFAM_VOL}:/autorfam/autorfam-code <autorfam_pipeline>
-  source /autorfam/local/venv-autorfam/bin/activate
-  /autorfam/autorfam-code/autoRfam.py -e docker <URS_list.txt>
-  # for help
-  /autorfam/autorfam-code/autoRfam.py -h
+  # 5. Run the luigi script with '-e lsf'
 
 
 
