@@ -2,18 +2,29 @@ autoRfam README
 ===============
 Description
 -----------
-TO_DO
+**autoRfam** is a pipeline that allows to cluster RNAcentral sequences into potential new families. It starts with a list of RNAcentral URSs, aligns them, selects the most relevant alignments, recollects important information about them (alignment statistics, annotations, publications, secondary structure prediction, coding potential, etc.) and makes this information browsable through ``html`` pages.
+
++--------+-------------------------------------------------+-----------------------+
+|**IN**  | List of RNAcentral URSs                         |see: URStest1.txt_     |
++--------+-------------------------------------------------+-----------------------+
+|**OUT** | Directory with results, browsable through the   | see: Detailed output  |
+|        | generated file ``/autoRfamNAV/HOME.html``       | directory structure   |
++--------+-------------------------------------------------+-----------------------+
+
+.. _URStest1.txt: https://github.com/nataquinones/autoRfam/blob/master/files/URStest1.txt
+.. _URStest2.txt: https://github.com/nataquinones/autoRfam/blob/master/files/URStest2.txt
+
 
 Requirements
 ------------
 - ``python 2.7.9``
 
-  - The ``python`` dependencies are specified in `requirements.txt <https://github.com/nataquinones/autoRfam/blob/master/requirements.txt>`_ and can be installed in a virtual environment as previously described.
+  - The ``python`` dependencies are specified in `requirements.txt <https://github.com/nataquinones/autoRfam/blob/master/requirements.txt>`_
  
 - From ``HMMER-3.1b2`` [`download <http://hmmer.org>`_]
 
   - ``nhmmer``
-  - ``esl-alistat`` and ``esl-reformat`` from the Easel library
+  - ``esl-alistat`` and ``esl-reformat`` from the ``Easel`` library
  
 - ``R-scape v0.3.3`` [`download <http://eddylab.org/R-scape/>`_]
 
@@ -44,6 +55,7 @@ To run with Docker
   cd /autorfam/autorfam-code
   # example run
   python autoRfam.py -e docker ./files/URStest2.txt
+  # Browse from: /files/autoRfam_URStest2/autoRfamNAV/HOME.html
   # for options
   python autoRfam.py -h
 
@@ -247,11 +259,12 @@ Luigi pipeline
 --------------
 .. image::  https://github.com/nataquinones/autoRfam/blob/master/docs/pipeline_diagram.png 
 
-Directory structure 
-^^^^^^^^^^^^^^^^^^^
+Detailed output directory structure 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 IN: ``URStest.txt``
 
 OUT:
+
 .. code::
 
       autoRfam_URStest/
