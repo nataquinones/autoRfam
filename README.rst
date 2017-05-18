@@ -15,7 +15,7 @@ Description
 .. _URStest2.txt: https://github.com/nataquinones/autoRfam/blob/master/files/URStest2.txt
 
 
-The **main script** is ``autoRfam.py``, which launches a `Luigi <http://luigi.readthedocs.io/en/stable/index.html>`_ pipeline (see: `Luigi Pipeline <https://github.com/nataquinones/autoRfam#luigi-pipeline>`_). Usage:
+The **main script** is ``autoRfam.py``, which launches a `Luigi <http://luigi.readthedocs.io/en/stable/index.html>`_ pipeline (see: `autoRfam Luigi pipeline <https://github.com/nataquinones/autoRfam#autorfam-luigi-pipeline>`_). Usage:
 
 .. code::
 
@@ -186,6 +186,6 @@ OUT:
           │    └── nhmmer.tbl
           └── seqs_keep.tsv
 
-Luigi Pipeline
---------------
+autoRfam Luigi pipeline
+-----------------------
 .. image::  https://github.com/nataquinones/autoRfam/blob/master/docs/pipeline_diagram.png 
