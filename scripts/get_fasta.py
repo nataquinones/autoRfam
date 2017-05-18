@@ -31,9 +31,15 @@ def fasta_seq(txtfile, fastafile):
 
     # fetch each element of the list from RNAcentral API and write file
     for i in urs_list:
-        url = ("http://rnacentral.org/api/v1/rna/%s?format=fasta") % i
-        req = requests.get(url, timeout=60)
+        url = ("http://rnacentral.org/api/v1/rna/%s?format=fasta") % i     
+        try:
+            req = requests.get(url, timeout=60)
+        except:
+            print "Can't reach this url:"
+            print url
+
         handle.write(req.content)
+
 
     # close file
     handle.close()
