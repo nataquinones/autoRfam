@@ -55,7 +55,7 @@ def easel_stats(eslalistat, ali_path):
 
     # Run esl-alistat on each file (taken from the dataframe), as subprocess
     for i in range(0, len(alistat_df)):
-        cmd = eslalistat + " --rna %s%s" % (ali_path, alistat_df["file"][i])
+        cmd = eslalistat + " --rna %s/%s" % (ali_path, alistat_df["file"][i])
         result = os.popen(cmd).readlines()
         if len(result) != 0:
             # make list and append values from subprocess

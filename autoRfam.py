@@ -5,6 +5,7 @@ import os
 import shutil
 import sys
 # ........................IMPORT PROJECT MODULES..............................
+from scripts import setup_check
 from scripts import get_fasta
 from scripts import nhmmer_allvsall
 from scripts import sto_slicer
@@ -18,203 +19,102 @@ from scripts import run_rnacode
 from scripts import all_html
 import templates
 
-# ......................SETUP AND ARGUMENT PARSER............................
-
-# .......... main argument parser
-parser = argparse.ArgumentParser()
-parser.add_argument("input_urs",
-                    metavar='<ursfile>',
-                    help="")
-parser.add_argument("-e", "--env",
-                    metavar='<s>',
-                    help="""<s> can be <local>, <docker> or <lsf>. \
-                          Select to import paths from appropriate \
-                          file in config/. Default setting is <local>.""",
-                    type=str,
-                    default="local")
-parser.add_argument("-o", "--outdir",
-                    metavar='<dir>',
-                    help="""<dir> is the path to the directory which will be created
-                            in which the whole pipeline output will be saved. \
-                            If argument not specified, it will create it in the
-                            /path/to/<ursfile>/autoRfam_<ursfile>""",
-                    default="default_dir",
-                    type=str)
-
-args = parser.parse_args()
+# ......................ARGUMENT PARSER AND SETUP............................
 
 
-# .......... conditional import of config/paths_*.py file
-if args.env == "local":
-    from config import paths_local as paths
-elif args.env == "docker":
-    from config import paths_docker as paths
-elif args.env == "lsf":
-    from config import paths_lsf as paths
-else:
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# autoRfam"
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# Invalid -e: Please select a valid option."
-    print "# Must be: local, docker or lsf."
-    print "#"
-    print "# For help: autoRfam.py -h"
-    print "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    sys.exit(1)
+def main_argparser():
+    """
+    Main argument parser. Defines the variables: input_urs, outdir and env.
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_urs",
+                        metavar='<ursfile>',
+                        help="")
+    parser.add_argument("-e", "--env",
+                        metavar='<s>',
+                        help="""<s> can be <local>, <docker> or <lsf>. \
+                              Select to import paths from appropriate \
+                              file in config/. Default setting is <local>.""",
+                        type=str,
+                        default="local")
+    parser.add_argument("-o", "--outdir",
+                        metavar='<dir>',
+                        help="""<dir> is the path to the directory which will be created
+                                in which the whole pipeline output will be saved. \
+                                If argument not specified, it will create it in the
+                                /path/to/<ursfile>/autoRfam_<ursfile>""",
+                        default="default_dir",
+                        type=str)
+
+    return parser.parse_args()
 
 
-# .......... import and check of config paths
-# nhmmer
-if os.path.exists(paths.nhmmerpath) & (os.path.basename(paths.nhmmerpath) == "nhmmer"):
-    NHMMERPATH = paths.nhmmerpath
-else:
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# autoRfam"
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# Can't find: nhmmer"
-    print "# I'm looking for '%s' as indicated in '%s'" % (paths.nhmmerpath, paths.__file__)
-    if (os.path.basename(paths.nhmmerpath) != "nhmmer"):
-        print "# The basename is '%s', but I expect it to be 'nhmmer'." % os.path.basename(paths.nhmmerpath)
+def import_config(args):
+    """
+    Conditonally import paths, depending on option specified in -e option
+    from main_argparser function.
+    """
+    args = main_argparser()
+    if args.env == "local":
+        from config import paths_local as paths
+    elif args.env == "docker":
+        from config import paths_docker as paths
+    elif args.env == "lsf":
+        from config import paths_lsf as paths
     else:
-        print "# Try selecting the correct -e option or ammending this config file."
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    sys.exit(1)
+        print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+        print "# autoRfam"
+        print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+        print "# Invalid -e: Please select a valid option."
+        print "# Must be: local, docker or lsf."
+        print "#"
+        print "# For help: autoRfam.py -h"
+        print "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+        sys.exit(1)
 
-# esl-alistat
-if os.path.exists(paths.eslalistat) & (os.path.basename(paths.eslalistat) == "esl-alistat"):
-    ESLALISTAT = paths.eslalistat
-else:
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# autoRfam"
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# Can't find: esl-alistat"
-    print "# I'm looking for '%s' as indicated in '%s'" % (paths.eslalistat, paths.__file__)
-    if (os.path.basename(paths.eslalistat) != "esl-alistat"):
-        print "# The basename is '%s', but I expect it to be 'esl-alistat'." % os.path.basename(paths.eslalistat)
-    else:
-        print "# Try selecting the correct -e option or ammending this config file."
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    sys.exit(1)
+    return paths
 
-# esl-reformat
-if os.path.exists(paths.eslref) & (os.path.basename(paths.eslref) == "esl-reformat"):
-    ESLREF_PATH = paths.eslref
-else:
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# autoRfam"
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# Can't find: esl-reformat"
-    print "# I'm looking for '%s' as indicated in '%s'" % (paths.eslref, paths.__file__)
-    if (os.path.basename(paths.eslref) != "esl-reformat"):
-        print "# The basename is '%s', but I expect it to be 'esl-reformat'." % os.path.basename(paths.eslref)
-    else:
-        print "# Try selecting the correct -e option or ammending this config file."
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    sys.exit(1)
-
-# r-scape
-if os.path.exists(paths.rscapepath) & (os.path.basename(paths.rscapepath) == "R-scape"):
-    RSCAPEPATH = paths.rscapepath
-else:
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# autoRfam"
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# Can't find: R-scape"
-    print "# I'm looking for '%s' as indicated in '%s'" % (paths.rscapepath, paths.__file__)
-    if (os.path.basename(paths.rscapepath) != "R-scape"):
-        print "# The basename is '%s', but I expect it to be 'R-scape'." % os.path.basename(paths.rscapepath)
-    else:
-        print "# Try selecting the correct -e option or ammending this config file."
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    sys.exit(1)
-
-# RNAcode
-if os.path.exists(paths.rnacodepath) & (os.path.basename(paths.rnacodepath) == "RNAcode"):
-    RNACODE_PATH = paths.rnacodepath
-else:
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# autoRfam"
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    print "# Can't find: RNAcode"
-    print "# I'm looking for '%s' as indicated in '%s'" % (paths.rnacodepath, paths.__file__)
-    if (os.path.basename(paths.rnacodepath) != "RNAcode"):
-        print "# The basename is '%s', but I expect it to be 'RNAcode'." % os.path.basename(paths.rnacodepath)
-    else:
-        print "# Try selecting the correct -e option or ammending this config file."
-    print "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-    sys.exit(1)
-
-DATA_PATH = os.path.dirname(os.path.abspath(templates.__file__))
-
-# .......... setup path variables
-# read input
-INPUT_URS = args.input_urs
-INPUT_ABS = os.path.abspath(INPUT_URS)
-
-# check if output path is valid
-if args.outdir == "default_dir":
-    NAME = os.path.splitext(os.path.basename(INPUT_ABS))[0]
-    DESTDIR = os.path.join(os.path.dirname(INPUT_ABS), "autoRfam_%s" % NAME)
-else:
-    if os.path.exists(os.path.abspath(args.outdir)):
-        if os.path.isfile(os.path.abspath(args.outdir)):
-            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-            print "# autoRfam"
-            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-            print "# Invalid -o: Please select a valid path."
-            print "# Problem:"
-            print "# '%s'" % os.path.abspath(args.outdir)
-            print "# is not a directory."
-            print "#"
-            print "# For help: autoRfam.py -h"
-            print "- - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-            sys.exit(1)
-
-        else:
-            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-            print "# autoRfam"
-            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-            print "# Invalid -o: Please select a valid path."
-            print "# Problem:"
-            print "# '%s'" % os.path.abspath(args.outdir)
-            print "# already exists."
-            print "# It needs to be a new directory."
-            print "#"
-            print "# For help: autoRfam.py -h"
-            print "- - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-            sys.exit(1)
-
-    else:
-        absdir_path = os.path.abspath(os.path.dirname(args.outdir))
-        if os.path.exists(absdir_path):
-            DESTDIR = os.path.abspath(args.outdir)
-        else:
-            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-            print "# autoRfam"
-            print "# - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-            print "# Invalid -o: Please select a valid path."
-            print "# Problem:"
-            print "# Can't create '%s', because" % args.outdir
-            print "# '%s' doesn't exist." % absdir_path
-            print "#"
-            print "# For help: autoRfam.py -h"
-            print "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-            sys.exit(1)
-
-# define global paths
-ALIDIR = os.path.join(DESTDIR, "alignments")
-DATADIR = os.path.join(DESTDIR, "gen_data")
-NAVDIR = os.path.join(DESTDIR, "autoRfamNAV")
 
 # ...........................LUIGI PIPELINE.................................
+
+
+class SetUp(luigi.Task):
+    """
+    """
+    arguments = main_argparser()
+    out_dir = setup_check.check_outdir(arguments)
+    paths = setup_check.check_config_paths(import_config(arguments))
+    data_dir = os.path.join(out_dir, "gen_data")
+    ali_dir = os.path.join(out_dir, "alignments")
+    nav_dir = os.path.join(out_dir, "autoRfamNAV")
+    nhmmer_dir = os.path.join(data_dir, "nhmmer_results")
+    allali_dir = os.path.join(ali_dir, "all_alignments")
+    cleanali_dir = os.path.join(ali_dir, "clean_alignments")
+    selali_dir = os.path.join(ali_dir, "selected_alignments")
+    indpag_dir = os.path.join(nav_dir, "indiv_pages")
+    template_dir = os.path.dirname(os.path.abspath(templates.__file__))
+
+    def output(self):
+        return luigi.LocalTarget(self.out_dir)
+
+    def run(self):
+        os.mkdir(self.out_dir)
+        os.mkdir(self.data_dir)
+        os.mkdir(self.ali_dir)
+
+
 class GetFasta(luigi.Task):
     """
     """
-    _in = INPUT_ABS
-    _out = os.path.join(DATADIR, "all_seqs.fasta")
+    _in = SetUp.arguments.input_urs
+    _out = os.path.join(SetUp.data_dir,
+                        "all_seqs.fasta")
 
     def output(self):
         return luigi.LocalTarget(self._out)
+
+    def requires(self):
+        return SetUp()
 
     def run(self):
         get_fasta.fasta_seq(self._in, self._out)
@@ -223,26 +123,31 @@ class GetFasta(luigi.Task):
 class NhmmerAll(luigi.Task):
     """
     """
-    outdir = os.path.join(DATADIR, "nhmmer_results")
+    outdir = SetUp.nhmmer_dir
     outname = "nhmmer"
 
     def output(self):
         return {"tbl": luigi.LocalTarget(os.path.join(self.outdir,
-                                                      self.outname + ".tbl")),
+                                                      self.outname +
+                                                      ".tbl")),
                 "sto": luigi.LocalTarget(os.path.join(self.outdir,
-                                                      self.outname + ".sto"))}
+                                                      self.outname +
+                                                      ".sto"))}
 
     def requires(self):
         return GetFasta()
 
     def run(self):
-        nhmmer_allvsall.main(NHMMERPATH, self.input().path, self.outdir, self.outname)
+        nhmmer_allvsall.main(SetUp.paths.nhmmerpath,
+                             self.input().path,
+                             self.outdir,
+                             self.outname)
 
 
 class StoSlice(luigi.Task):
     """
     """
-    outdir = os.path.join(ALIDIR, "all_alignments")
+    outdir = SetUp.allali_dir
 
     def output(self):
         return luigi.LocalTarget(self.outdir)
@@ -251,13 +156,15 @@ class StoSlice(luigi.Task):
         return NhmmerAll()
 
     def run(self):
-        sto_slicer.slice_sto(self.input()["sto"].path, self.outdir)
+        sto_slicer.slice_sto(self.input()["sto"].path,
+                             self.outdir)
 
 
 class NhmmerTblParse(luigi.Task):
     """
     """
-    _out = os.path.join(DATADIR, "clean_hits.tsv")
+    _out = os.path.join(SetUp.data_dir,
+                        "clean_hits.tsv")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -266,13 +173,15 @@ class NhmmerTblParse(luigi.Task):
         return NhmmerAll()
 
     def run(self):
-        nhmmertbl_parse.clean_selfhits(self.input()["tbl"].path, self._out)
+        nhmmertbl_parse.clean_selfhits(self.input()["tbl"].path,
+                                       self._out)
 
 
 class MarkToClean(luigi.Task):
     """
     """
-    _out = os.path.join(DATADIR, "seqs_keep.tsv")
+    _out = os.path.join(SetUp.data_dir,
+                        "seqs_keep.tsv")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -281,12 +190,15 @@ class MarkToClean(luigi.Task):
         return NhmmerTblParse()
 
     def run(self):
-        marktoclean.main(self.input().path, self._out)
+        marktoclean.main(self.input().path,
+                         self._out)
+
 
 class ClusterAli(luigi.Task):
     """
     """
-    _out = os.path.join(DATADIR, "comp.list")
+    _out = os.path.join(SetUp.data_dir,
+                        "comp.list")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -295,13 +207,14 @@ class ClusterAli(luigi.Task):
         return NhmmerTblParse()
 
     def run(self):
-        cluster_ali.main(self.input().path, self._out)
+        cluster_ali.main(self.input().path,
+                         self._out)
 
 
 class CleanAli(luigi.Task):
     """
     """
-    _out = os.path.join(ALIDIR, "clean_alignments/")
+    _out = SetUp.cleanali_dir
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -311,15 +224,17 @@ class CleanAli(luigi.Task):
                 "toclean": MarkToClean()}
 
     def run(self):
-        clean_ali.main(self.input()["toclean"].path, self.input()["stosliced"].path, self._out)
+        clean_ali.main(self.input()["toclean"].path,
+                       self.input()["stosliced"].path,
+                       self._out)
 
 
 class PickRepAli(luigi.Task):
     """
     """
-    _tsvout = os.path.join(DATADIR, "groups.tsv")
-    outdir = os.path.join(ALIDIR, "selected_alignments")
-    outdir2 = os.path.join(NAVDIR, "indiv_pages")
+    _tsvout = os.path.join(SetUp.data_dir, "groups.tsv")
+    outdir = SetUp.selali_dir
+    outdir2 = SetUp.indpag_dir
 
     def output(self):
         return luigi.LocalTarget(os.path.join(self.outdir2))
@@ -329,14 +244,20 @@ class PickRepAli(luigi.Task):
                 "complist": ClusterAli()}
 
     def run(self):
-        pick_repali.main(ESLALISTAT, self.input()["complist"].path, self.input()["cleanali"].path, self._tsvout, self.outdir)
-        shutil.copytree(self.outdir, os.path.join(NAVDIR, "indiv_pages"))
+        pick_repali.main(SetUp.paths.eslalistat,
+                         self.input()["complist"].path,
+                         self.input()["cleanali"].path,
+                         self._tsvout,
+                         self.outdir)
+        shutil.copytree(self.outdir,
+                        SetUp.indpag_dir)
 
 
 class RunRscape(luigi.Task):
     """
     """
-    _out = os.path.join(PickRepAli.outdir2, "rscape.log")
+    _out = os.path.join(PickRepAli.outdir2,
+                        "rscape.log")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -345,13 +266,15 @@ class RunRscape(luigi.Task):
         return PickRepAli()
 
     def run(self):
-        run_rscape.iterdir(RSCAPEPATH, self.input().path)
+        run_rscape.iterdir(SetUp.paths.rscapepath,
+                           self.input().path)
 
 
 class RunRNAcode(luigi.Task):
     """
     """
-    _out = os.path.join(PickRepAli.outdir2, "rnacode.log")
+    _out = os.path.join(PickRepAli.outdir2,
+                        "rnacode.log")
 
     def output(self):
         return luigi.LocalTarget(self._out)
@@ -360,14 +283,18 @@ class RunRNAcode(luigi.Task):
         return PickRepAli()
 
     def run(self):
-        run_rnacode.iterdir(ESLREF_PATH, RNACODE_PATH, self.input().path)
+        run_rnacode.iterdir(SetUp.paths.eslref,
+                            SetUp.paths.rnacodepath,
+                            self.input().path)
 
 
 class AllHtml(luigi.Task):
     """
     """
-    _homepath = os.path.join(NAVDIR, "HOME.html")
-    _hometsv = os.path.join(DATADIR, "home.tsv")
+    _homepath = os.path.join(SetUp.nav_dir,
+                             "HOME.html")
+    _hometsv = os.path.join(SetUp.data_dir,
+                            "home.tsv")
 
     def requires(self):
         return {"selali": PickRepAli(),
@@ -375,19 +302,16 @@ class AllHtml(luigi.Task):
                 "rnacode": RunRNAcode()}
 
     def run(self):
-        all_html.main(ESLALISTAT, self.input()["selali"].path, self._homepath, self._hometsv)
-        for file in os.listdir(DATA_PATH):
-            if not file.startswith('__init__'):
-                shutil.copy(os.path.join(DATA_PATH, file), os.path.join(NAVDIR, file))
+        all_html.main(SetUp.paths.eslalistat,
+                      self.input()["selali"].path,
+                      self._homepath,
+                      self._hometsv)
+        for filex in os.listdir(SetUp.template_dir):
+            if not filex.startswith('__init__'):
+                shutil.copy(os.path.join(SetUp.template_dir, filex),
+                            os.path.join(SetUp.nav_dir, filex))
 
+# ..........................................................................
 
 if __name__ == '__main__':
-    if not os.path.exists(DESTDIR):
-        os.mkdir(DESTDIR, 0777)
-    if not os.path.exists(ALIDIR):
-        os.mkdir(ALIDIR, 0777)
-    if not os.path.exists(DATADIR):
-        os.mkdir(DATADIR, 0777)
-    if not os.path.exists(NAVDIR):
-        os.mkdir(NAVDIR, 0777)
     luigi.run(["--local-scheduler"], main_task_cls=AllHtml)
