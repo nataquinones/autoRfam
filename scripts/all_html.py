@@ -129,33 +129,43 @@ def request_xrefs(urs):
             data = req.json()
             # fetch the relevant parameters per xref
             num_db = len(data["results"])
+            if num_db != 0:
+                for j in range(0, num_db):
+                    # values for table
+                    urs_link = "<a href=\"http://rnacentral.org/rna/%s\" target=\"_blank\">%s</a>" % (i, i)
+                    db_name = str(data["results"][j]["database"])
 
-            for j in range(0, num_db):
-                # values for table
-                urs_link = "<a href=\"http://rnacentral.org/rna/%s\" target=\"_blank\">%s</a>" % (i, i)
-                db_name = str(data["results"][j]["database"])
+                    if data["results"][j]["is_expert_db"] == True:
+                        source_url = str(data["results"][j]["accession"]["expert_db_url"])
 
-                if data["results"][j]["is_expert_db"] == True:
-                    source_url = str(data["results"][j]["accession"]["expert_db_url"])
-
-                else:
-                    source_url = str(data["results"][j]["accession"]["source_url"])
-                db_link = "<a href=\"%s\" target=\"_blank\">%s</a>" % (source_url, db_name)
-                rna_type = str(data["results"][j]["accession"]["rna_type"])
-                product = str(data["results"][j]["accession"]["product"])
-                taxid = str(data["results"][j]["taxid"])
-                species = str(data["results"][j]["accession"]["species"])
-                # write into line
+                    else:
+                        source_url = str(data["results"][j]["accession"]["source_url"])
+                    db_link = "<a href=\"%s\" target=\"_blank\">%s</a>" % (source_url, db_name)
+                    rna_type = str(data["results"][j]["accession"]["rna_type"])
+                    product = str(data["results"][j]["accession"]["product"])
+                    taxid = str(data["results"][j]["taxid"])
+                    species = str(data["results"][j]["accession"]["species"])
+                    # write into line
+                    line = [[i,
+                             urs_link,
+                             db_name,
+                             db_link,
+                             rna_type,
+                             product,
+                             taxid,
+                             species]]
+            else:
                 line = [[i,
-                         urs_link,
-                         db_name,
-                         db_link,
-                         rna_type,
-                         product,
-                         taxid,
-                         species]]
-                # append line into df
-                df_xrefs = df_xrefs.append(line)
+                         "error_no_db",
+                         "error_no_db",
+                         "error_no_db",
+                         "error_no_db",
+                         "error_no_db",
+                         "error_no_db",
+                         "error_no_db"]]
+
+            # append line into df
+            df_xrefs = df_xrefs.append(line)
 
         # if timeout, add line indicating it
         except requests.exceptions.Timeout:
@@ -318,9 +328,9 @@ def make_html(eslalistat, stoali):
                       "</font>\n" % (os.path.join(".", RNACODE_FOLDER))
     # ....Rscape
     rscape_img = os.path.join(os.path.join(os.path.dirname(stoali), RSCAPE_FOLDER), "*.cyk.R2R.sto.svg")
-    img_src = glob.glob(rscape_img)[0]
 
     if len(glob.glob(rscape_img)) != 0:
+        img_src = glob.glob(rscape_img)[0]
         rscape_html = "<img src=%s>" % os.path.join(".", RSCAPE_FOLDER, os.path.basename(img_src))
 
     else:
