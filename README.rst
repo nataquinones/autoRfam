@@ -57,32 +57,40 @@ To run with Docker
 ^^^^^^^^^^^^^^^^^^
 .. code:: bash
 
-
   # 1. Clone or download repository
   cd /path/to/autorfam/code
   git clone https://github.com/nataquinones/autoRfam.git
-
-  # 2. Run the build
   export AUTORFAM_VOL=/path/to/autorfam/code/autoRfam
+  
+  # 2. Build image
   cd $AUTORFAM_VOL
   docker-compose build
 
-  # 3. Enter the container
+  # 3. Run service, bin/bash is the entrypoint
   docker-compose run pipeline
 
-  # 4. Once inside the container, to run autoRfam:
+  # 4. Once inside, to run autoRfam:
   source $LOC/venv-autorfam/bin/activate
   cd /autorfam/autorfam-code
-  # example run
-  python autoRfam.py -e docker ./files/URStest2.txt
-  # browse results from: /files/autoRfam_URStest2/autoRfamNAV/HOME.html
+  python autoRfam.py -e docker [-o <dir>] <ursfile>
   
-  # for options
+  
+  # Example 1
+  python autoRfam.py -e docker ./files/URStest2.txt
+  # browse results from: $AUTORFAM_VOL/files/autoRfam_URStest2/autoRfamNAV/HOME.html
+  
+  # Example 2, using -o option
+  python autoRfam.py -e docker -o ./files/example2 ./files/URStest1.txt
+  # browse results from: $AUTORFAM_VOL/files/example2/autoRfamNAV/HOME.html
+  
+  # For help
   python autoRfam.py -h
 
 
 To run locally
 ^^^^^^^^^^^^^^
+You must have the `requirements <https://github.com/nataquinones/autoRfam#requirements>`_ installed.
+
 .. code:: bash
 
   # 1. Clone or download repository
@@ -98,21 +106,25 @@ To run locally
 
   # 3. Create a new virtual environment
   virtualenv /path/to/new/autorfam-venv/
-
-  # 4. Activate virtual environment
   source /path/to/new/autorfam-venv/bin/activate
-
-  # 5. Install python dependencies
   cd /path/to/autorfam/code/autoRfam/
   pip install -r requirements.txt
 
-  # 6. Run
+  # 4. Run autoRfam
+  # source /path/to/new/autorfam-venv/bin/activate
   cd /path/to/autorfam/code/autoRfam/
-  # example run
-  python autoRfam.py -e local ./files/URStest2.txt
-  # browse results from: /files/autoRfam_URStest2/autoRfamNAV/HOME.html
+  python autoRfam.py -e local [-o <dir>] <ursfile>
   
-  # for options
+  
+  # Example 1
+  python autoRfam.py -e local ./files/URStest2.txt
+  # browse results from: /path/to/autorfam/code/files/autoRfam_URStest2/autoRfamNAV/HOME.html
+  
+  # Example 2, using -o option
+  python autoRfam.py -e local -o ./files/example2 ./files/URStest1.txt
+  # browse results from: /path/to/autorfam/code/files/example2/autoRfamNAV/HOME.html
+  
+  # For help
   python autoRfam.py -h
 
 
