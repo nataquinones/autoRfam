@@ -512,12 +512,16 @@ def iterdir(eslalistat, hometsv, dir_path):
     directories with an alignment inside.
     """
     for folder in glob.glob(os.path.join(dir_path, '*')):
-        alignments = glob.glob(os.path.join(folder, "*.sto"))
-
-        for filesto in alignments:
-            shutil.copy(filesto, filesto + ".txt")
-            infoline = make_html(eslalistat, filesto)
-            write_homeinfo(infoline, hometsv)
+        # this part checks if there's already a generated html file,
+        # so if the script crashes, it's relaunchable without
+        # making a mess
+        htmls = glob.glob(os.path.join(folder, "*.html"))
+        if len(htmls) == 0:
+            alignments = glob.glob(os.path.join(folder, "*.sto"))
+            for filesto in alignments:
+                shutil.copy(filesto, filesto + ".txt")
+                infoline = make_html(eslalistat, filesto)
+                write_homeinfo(infoline, hometsv)
 
 
 def home_table(hometsv):
