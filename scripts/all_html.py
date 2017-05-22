@@ -255,9 +255,9 @@ def check_rscape(stoali):
     """
     """
     rscspe_results = os.path.join(os.path.dirname(stoali), RSCAPE_FOLDER)
-    outfile = glob.glob(os.path.join(rscspe_results, "*.out"))[0]
+    outfile = glob.glob(os.path.join(rscspe_results, "*.svg"))
 
-    if os.stat(outfile).st_size != 0:
+    if len(outfile) != 0:
         rscapewarn = True
 
     else:
@@ -557,12 +557,12 @@ def home_table(hometsv):
                           "Number of<br>sequences",
                           "Alignment<br>length",
                           "Avg. sequence<br>length",
-                          "Lengths<br>ratio",
+                          "Gap<br>ratio",
                           "Avg. id",
                           "Number of<br>publications",
                           "Number of<br>databases",
                           "RNAcode<br>warning",
-                          "R-scape<br>sig.",
+                          "R-scape<br>image",
                           "Dominant<br>rna_type"]
 
     return browse_df
