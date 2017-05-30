@@ -99,9 +99,16 @@ class SetUp(luigi.Task):
         return luigi.LocalTarget(self.out_dir)
 
     def run(self):
-        os.mkdir(self.out_dir)
-        os.mkdir(self.data_dir)
-        os.mkdir(self.ali_dir)
+        
+        if not os.path.exists(self.out_dir):
+            os.mkdir(self.out_dir)
+            #os.chmod(self.out_dir,0777)
+        if not os.path.exists(self.data_dir):
+            os.mkdir(self.data_dir)
+            #os.chmod(self.out_dir,0777)
+        if not  os.path.exists(self.ali_dir):
+            os.mkdir(self.ali_dir)
+            #os.chmod(self.out_dir,0777)
 
 
 class GetFasta(luigi.Task):
